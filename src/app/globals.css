@@ -1,42 +1,49 @@
 /* src/app/globals.css */
 
+/* Tailwind CSS 관련 기본 설정 (없으므로 주석 처리 유지) */
+/* @tailwind base;
+@tailwind components;
+@tailwind utilities; */
+
 /* --- 1. 색상 변수 정의 (root에 정의되어야 합니다) --- */
 :root {
-  /* 배경 및 전경색 */
-  --background: #0f172a; /* 시안의 slate/900 */
-  --foreground: #f1f5f9; /* 시안의 slate/100 */
+  /* 배경 및 전경색 (시안 (image_b8bac4.png) 의 어두운 회색 배경에 맞춰 조정) */
+  --background: #363636; /* 시안 (image_b8bac4.png, image_b924d6.png) 의 어두운 회색 배경 */
+  --foreground: #e0e6ed; /* 기본 텍스트 색상 (밝은 회색) */
 
-  /* Slate 계열 색상 */
-  --slate-900: #0f172a;
-  --slate-800: #1e293b;
-  --slate-500: #64748b;
-  --slate-400: #94a3b8;
+  /* Slate 계열 색상 (시안의 회색 톤에 맞춰 조정) */
+  --slate-900: #0f172a; /* 버튼 테두리, 진한 텍스트, 검정 아이콘 (시안에서 검정색 테두리 및 검정 아이콘으로 보임) */
+  --slate-900-alpha-50: rgba(15, 23, 42, 0.5);
+  --slate-800: #1e293b; /* 이미지 수정 버튼 배경색 (시안 (image_b924d6.png) 의 짙은 회색 배경에 맞춰 새로 정의) */
+  --slate-500: #64748b; /* 완료된 텍스트 색상, 회색 아이콘 (이미지 추가/수정 버튼의 회색 아이콘) */
+  --slate-400: #94a3b8; /* 비활성화 텍스트 색상 */
   --slate-300: #cbd5e1;
-  --slate-200: #e2e8f0;
+  --slate-200: #e2e8f0; /* 수정 완료 비활성화 버튼 배경 */
   --slate-100: #f1f5f9;
+  --white: #ffffff; /* 흰색 */
 
   /* Primary (Violet) 계열 색상 */
-  --violet-600: #7c3aed;
-  --violet-100: #ede9fe;
+  --violet-500: #8b5cf6; /* 시안의 기본 보라색 (추가하기 버튼) */
+  --violet-600: #7c3aed; /* 보라색 hover */
+  --violet-100: #ede9fe; /* 연보라색 (완료된 체크리스트 배경) */
 
   /* Accent 계열 색상 */
-  --rose-500: #f43f5e;
-  --lime-300: #bef264;
+  --rose-500: #f43f5e; /* 삭제하기 버튼 배경색 */
+  --rose-600: #e11d48; /* 삭제하기 버튼 hover */
+  --green-active-button: #bef264; /* '수정 완료' 활성화 버튼의 시안 (image_b8bac4.png) 색상에 맞춰 새로 정의 */
+  --green-active-button-hover: #aadc3c; /* '수정 완료' 활성화 버튼 hover */
   --amber-800: #92400e;
 }
 
 /* --- 2. HTML 및 body의 기본 스타일 --- */
-/* 전체 페이지의 배경색과 기본 폰트 색상을 설정합니다. */
 html,
 body {
   padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-  background-color: var(--background); /* 시안의 어두운 배경색 적용 */
+  font-family: var(--font-nanum-square-regular), sans-serif; /* 기본 폰트 Regular */
+  background-color: var(--background); /* 시안의 회색 배경색 적용 */
   color: var(--foreground); /* 기본 텍스트 색상을 밝게 설정 */
-  min-height: 100vh; /* 페이지 최소 높이를 뷰포트 높이로 설정 */
-  /* 개발자 도구에서 body 요소의 스타일이 이 값으로 적용되었는지 확인 필수! */
+  min-height: 100vh;
 }
 
 a {
@@ -49,123 +56,152 @@ a {
 }
 
 /* --- Button Component Styles --- */
-
-/* 모든 버튼에 공통적으로 적용될 기본 스타일 */
 .btn-base {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 600;
+  font-family: var(--font-nanum-square-bold), sans-serif; /* 버튼 텍스트 Bold */
+  font-weight: 700; /* 시안에서 700으로 명시됨 */
+  font-size: 16px; /* 시안에서 16px로 명시됨 */
+  line-height: 100%; /* 시안에서 100%로 명시됨 */
+  letter-spacing: 0%; /* 시안에서 0%로 명시됨 */
+  text-align: center; /* 시안에서 center로 명시됨 */
+  vertical-align: middle; /* 시안에서 middle로 명시됨 */
   cursor: pointer;
-  /* transition은 각 버튼 variant별로 hover에 맞춰 개별적으로 줄 수도 있지만, 여기서는 공통 클래스에 추가 */
   transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out,
-    color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    color 0.2s ease-in-out, box-shadow 0.2s ease-in-out; /* transition에 box-shadow 포함 */
+  box-sizing: border-box;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* 시안 (image_b8bac4.png) 에서 보이는 그림자 */
 }
 
-/* 기본 텍스트 버튼 스타일 (textPrimary) */
+/* '추가하기' 흰색 배경 버튼 (btn-text-primary) */
 .btn-text-primary {
-  background-color: var(--background); /* 흰색 배경 */
-  color: var(--slate-900);
-  border: 1px solid var(--slate-300);
-  padding: 8px 16px;
-  border-radius: 8px;
+  width: 168px; /* 시안 */
+  height: 56px; /* 시안 */
+  background-color: var(--white);
+  color: var(--slate-900); /* 텍스트 색상 (검정색) */
+  border: 2px solid var(--slate-900); /* 시안에 맞춰 진한 테두리 */
+  border-radius: 24px; /* 시안 */
+  padding: 0;
 }
 .btn-text-primary:hover {
   background-color: var(--slate-100);
 }
 
-/* 초기 추가하기 버튼 스타일 (addInitial) */
+/* '추가하기' 보라색 배경 버튼 (btn-add-initial) */
 .btn-add-initial {
-  background-color: var(--violet-600);
-  color: white;
-  padding: 8px 16px;
-  border-radius: 8px;
+  width: 168px; /* 시안 */
+  height: 56px; /* 시안 */
+  background-color: var(--violet-500);
+  color: var(--white);
+  border: 2px solid var(--slate-900); /* 시안에 맞춰 진한 테두리 */
+  border-radius: 24px; /* 시안 */
+  padding: 0;
 }
 .btn-add-initial:hover {
-  background-color: var(
-    --violet-700
-  ); /* Figma 시안에 hover 컬러가 명시되지 않아 임시로 더 진한 보라색 사용 */
+  background-color: var(--violet-600);
 }
 
-/* addInitial variant의 원형 아이콘 전용 스타일 (텍스트 없는 경우) */
+/* 원형 보라색 아이콘 전용 버튼 (btn-add-initial.btn-icon-only) */
 .btn-add-initial.btn-icon-only {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%; /* 원형 */
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* 그림자 */
-  padding: 0; /* 원형 아이콘 버튼은 패딩 제거 */
+  width: 56px; /* 시안 */
+  height: 56px; /* 시안 */
+  border-radius: 50%;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* 시안 (image_b8bac4.png) 하단 원형 버튼에 그림자 있음 */
 }
 .btn-add-initial.btn-icon-only:hover {
-  background-color: var(--violet-700);
+  background-color: var(--violet-600);
 }
 
-/* 삭제하기 버튼 스타일 (delete) */
+/* '삭제하기' 붉은색 배경 버튼 (btn-delete) */
 .btn-delete {
-  background-color: var(--rose-500);
-  color: white;
-  padding: 8px 16px;
-  border-radius: 8px;
+  width: 168px; /* 시안 */
+  height: 56px; /* 시안 */
+  background-color: var(--rose-500); /* 시안의 붉은색 */
+  color: var(--white);
+  border: 2px solid var(--slate-900); /* 시안의 진한 테두리 */
+  border-radius: 24px; /* 시안 */
+  padding: 0;
 }
 .btn-delete:hover {
-  background-color: var(
-    --rose-600
-  ); /* Figma 시안에 hover 컬러가 명시되지 않아 임시로 더 진한 붉은색 사용 */
+  background-color: var(--rose-600);
 }
 
-/* 수정 완료 버튼 스타일 (submitSuccess) */
+/* '수정 완료' 버튼 (btn-submit-success) */
 .btn-submit-success {
-  padding: 8px 16px;
-  border-radius: 8px;
-  color: var(--slate-900); /* 기본 텍스트 색상 */
+  width: 168px; /* 시안 */
+  height: 56px; /* 시안 */
+  border-radius: 24px; /* 시안 */
+  padding: 0;
 }
 .btn-submit-success.active {
-  /* 활성화 상태 */
-  background-color: var(--lime-300);
+  /* 활성화 상태 (시안의 연두색 배경, 진한 테두리) */
+  background-color: var(--green-active-button); /* 새로운 시안 연두색 */
+  color: var(--slate-900); /* 텍스트/아이콘 색상 (검정색) */
+  border: 2px solid var(--slate-900); /* 시안의 진한 테두리 */
 }
 .btn-submit-success.active:hover {
-  background-color: var(
-    --lime-400
-  ); /* Figma 시안에 hover 컬러가 명시되지 않아 임시로 더 진한 연두색 사용 */
+  background-color: var(--green-active-button-hover);
 }
 .btn-submit-success:not(.active) {
-  /* 비활성화 상태 */
-  background-color: var(--slate-200);
-  color: var(--slate-400);
+  /* 비활성화 상태 (밝은 회색 배경, 어두운 회색 텍스트/아이콘) */
+  background-color: var(--slate-200); /* 시안의 밝은 회색 비활성화 버튼 */
+  color: var(--slate-400); /* 시안의 비활성화 텍스트 색상 */
+  border: 2px solid var(--slate-900); /* 시안의 진한 테두리 */
   cursor: not-allowed;
+  opacity: 1;
+}
+.btn-submit-success:not(.active):hover {
+  background-color: var(--slate-200); /* 비활성화 상태에서는 hover 효과 없음 */
 }
 
 /* 상세 페이지 이미지 추가/수정 아이콘 버튼 (iconImageAdd, iconImageEdit) */
 .btn-icon-image-action {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%; /* 원형 */
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* 그림자 */
-  background-color: var(--background); /* 흰색 배경 */
-  padding: 0; /* 패딩 제거 */
+  width: 64px; /* <-- 이 부분을 64px로 변경 */
+  height: 64px; /* <-- 이 부분을 64px로 변경 */
+  border-radius: 50%;
+  border: 2px solid var(--slate-900); /* 시안의 진한 테두리 */
+  padding: 0;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 }
-.btn-icon-image-action:hover {
+/* 이미지 추가 버튼 (흰색 배경) */
+.btn-icon-image-action.variant-add {
+  background-color: var(--white); /* 시안 (image_add292.png) 의 흰색 배경 */
+}
+.btn-icon-image-action.variant-add:hover {
   background-color: var(--slate-100);
+}
+/* 이미지 수정 버튼 (짙은 회색 배경) */
+.btn-icon-image-action.variant-edit {
+  background-color: var(
+    --slate-900-alpha-50
+  ); /* <-- 이 부분을 새로운 변수로 변경합니다. */
+  border-color: var(--slate-900); /* <-- border는 기존 slate-900으로 유지 */
+}
+.btn-icon-image-action.variant-edit:hover {
+  background-color: rgba(15, 23, 42, 0.6); /* hover 시 좀 더 진하게 */
 }
 
 /* --- 3. ChecklistItem Component Styles --- */
 .checklist-item {
   display: flex;
   align-items: center;
-  gap: 12px;
-  background-color: white; /* 체크 안 된 상태의 배경색은 흰색 */
-  border: 2px solid var(--slate-200); /* <-- border-width: 2px로 변경 */
-  border-radius: 27px; /* <-- 이 값을 27px로 변경 */
-  padding: 12px 16px; /* 이 패딩으로 height 50px이 맞춰지는지 확인. 안 맞으면 min-height 추가 고려 */
+  gap: 10px; /* 시안 (image_b89d8e.png) gap 10px로 변경 */
+  background-color: var(--white); /* 시안 (image_bbe2ae.png) 의 흰색 배경 */
+  border: 2px solid var(--slate-900); /* 시안에 맞춰 진한 테두리 */
+  border-radius: 27px; /* 시안 */
+  padding: 9px 16px; /* 50px 높이, 2px 테두리, 32px 아이콘 고려하여 상하 9px로 조정 */
   width: 100%;
-  max-width: 527px; /* <-- width 527px으로 변경 */
-  /* min-height: 50px; <-- 만약 패딩만으로 높이가 안 맞춰지면 이 줄을 추가 */
-  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05);
-  transition: background-color 0.3s ease, border-color 0.3s ease;
+  max-width: 527px; /* 시안 */
+  min-height: 50px; /* 시안 */
+  box-shadow: none; /* 시안 (image_bbe2ae.png) 에서는 그림자 없음 */
+  transition: background-color 0.3s ease, border-color 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 /* 완료된 할 일 아이템 스타일 */
 .checklist-item.completed {
-  background-color: var(--violet-100); /* 완료 시 시안의 연보라색 배경 */
+  background-color: var(--violet-100); /* 완료 시 연보라색 배경 */
   border-color: var(--violet-100); /* 완료 시 테두리 색상도 배경색과 동일 */
 }
 
@@ -175,7 +211,7 @@ a {
   border: none;
   padding: 0;
   cursor: pointer;
-  display: flex; /* 이미지 중앙 정렬 */
+  display: flex;
   align-items: center;
   justify-content: center;
 }
@@ -183,20 +219,50 @@ a {
 /* 할 일 텍스트 스타일 */
 .checklist-item-text {
   flex-grow: 1;
-  font-size: 16px;
-  color: var(--slate-900); /* 기본 텍스트 색상 */
+  font-family: var(--font-nanum-square-regular), sans-serif; /* ChecklistItem 텍스트 Regular */
+  font-size: 16px; /* 시안에서 16px로 명시됨 */
+  color: var(--slate-900); /* 기본 텍스트 색상 (진한 회색) */
   word-break: break-word;
-  transition: color 0.3s ease, text-decoration 0.3s ease; /* 부드러운 전환 효과 */
+  transition: color 0.3s ease, text-decoration 0.3s ease;
 }
 
 /* 완료된 할 일 텍스트 스타일 */
 .checklist-item-text.completed {
   color: var(--slate-500); /* 완료 시 텍스트 색상 변경 */
-  text-decoration: line-through; /* 취소선 적용 */
+  text-decoration: line-through;
 }
 
-/* 호버 효과 (선택 사항) */
+/* 호버 효과 (ChecklistItem) */
 .checklist-item:hover {
-  border-color: var(--violet-600); /* 호버 시 테두리 색상 변경 */
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  border-color: var(--violet-500); /* 호버 시 보라색 테두리 */
+}
+
+/* --- Icon Color Styles (SVG fill="currentColor" 필요) --- */
+/* 아이콘 색상 제어를 위한 클래스 */
+.icon-color-white {
+  color: var(
+    --white
+  ); /* 흰색 아이콘 (삭제, 보라색 추가 버튼, 완료된 체크박스 체크 등) */
+}
+
+.icon-color-text-primary {
+  color: var(
+    --slate-900
+  ); /* 검정색 아이콘 (흰색 배경 '추가하기' 버튼용, 체크 전 체크박스 테두리 등) */
+}
+
+.icon-color-image-action-add {
+  color: var(--slate-500); /* 회색 아이콘 (흰색 이미지 추가 버튼용) */
+}
+
+.icon-color-image-action-edit {
+  color: var(--white); /* 흰색 아이콘 (짙은 회색 이미지 수정 버튼용) */
+}
+
+.icon-color-submit-success-active {
+  color: var(--slate-900); /* '수정 완료' 활성화 버튼의 아이콘 색상 (검정색) */
+}
+
+.icon-color-submit-success-inactive {
+  color: var(--slate-400); /* '수정 완료' 비활성화 버튼의 아이콘 색상 */
 }

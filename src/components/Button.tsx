@@ -1,30 +1,23 @@
 // src/components/Button.tsx
-"use client"; // 클릭 이벤트를 위해 클라이언트 컴포넌트로 지정
+"use client";
 
 import React from "react";
 import Image from "next/image";
 
-// 필요한 아이콘들을 import
-import PlusIcon from "../../public/ic/plus.svg";
-import XIcon from "../../public/ic/X.svg";
-import CheckIcon from "../../public/ic/check.svg";
-import EditIcon from "../../public/ic/edit.svg";
-
-// 버튼의 타입을 정의합니다.
 type ButtonVariant =
-  | "add" // 흰 배경 '추가하기' (텍스트 + 아이콘)
-  | "addInitial" // 보라색 '추가하기' (텍스트 + 아이콘, 또는 아이콘만 있는 원형 버튼)
-  | "delete" // 붉은색 '삭제하기' (텍스트 + 아이콘)
-  | "submitSuccess" // 연두색 '수정 완료' (텍스트 + 아이콘, 활성화/비활성화)
-  | "iconImageAdd" // 상세 페이지 이미지 '추가' (+) 아이콘 버튼
-  | "iconImageEdit"; // 상세 페이지 이미지 '수정' (연필) 아이콘 버튼
+  | "add"
+  | "addInitial"
+  | "delete"
+  | "submitSuccess"
+  | "iconImageAdd" // 이미지 추가 버튼
+  | "iconImageEdit"; // 이미지 수정 버튼
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
-  children?: React.ReactNode; // children을 선택적으로 변경
-  icon?: "plus" | "x" | "check" | "edit"; // 버튼에 들어갈 아이콘 종류
+  children?: React.ReactNode;
+  icon?: "plus" | "x" | "check" | "edit" | "plusLarge"; // "plus"는 이제 검정색, "plus-white" 추가할 수 있음
   iconPosition?: "left" | "right";
-  isActive?: boolean; // 'submitSuccess' 버튼의 활성화/비활성화 여부
+  isActive?: boolean;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -33,38 +26,52 @@ const Button: React.FC<ButtonProps> = ({
   icon,
   iconPosition = "left",
   className = "",
-  isActive = true, // isActive 기본값 true로 설정
+  isActive = true,
   ...props
 }) => {
-  const buttonClassNames = ["btn-base"]; // 모든 버튼에 공통적으로 적용될 클래스
+  const buttonClassNames = ["btn-base"];
 
-  // iconSrc와 iconAlt를 Button 컴포넌트 스코프의 최상단에서 선언
-  let iconSrc: string | null = null;
+  let iconSrcPath: string | null = null;
   let iconAlt: string = "";
-  const iconSize = 20; // 아이콘 크기 통일
+  let iconSize = 16; // 기본 아이콘 사이즈
 
-  // 아이콘 src 결정 로직
   switch (icon) {
     case "plus":
-      iconSrc = PlusIcon;
+      // 'add' variant (흰색 배경) 에서 사용될 검정색 '+' 아이콘
+      iconSrcPath = "/ic/plus.svg";
       iconAlt = "추가 아이콘";
       break;
     case "x":
-      iconSrc = XIcon;
+      iconSrcPath = "/ic/X.svg";
       iconAlt = "닫기/삭제 아이콘";
       break;
     case "check":
-      iconSrc = CheckIcon;
+      iconSrcPath = "/ic/check.svg";
       iconAlt = "체크 아이콘";
       break;
     case "edit":
-      iconSrc = EditIcon;
+      iconSrcPath = "/ic/edit.svg";
       iconAlt = "수정 아이콘";
+      iconSize = 24;
+      break;
+    case "plusLarge":
+      iconSrcPath = "/ic/plus-large.svg";
+      iconAlt = "이미지 추가 아이콘";
+      iconSize = 24;
       break;
     default:
-      iconSrc = null; // icon prop이 없거나 일치하지 않을 경우
+      iconSrcPath = null;
       iconAlt = "";
   }
+
+  // variant가 addInitial일 경우 plus-white.svg를 사용하도록 강제
+  if (variant === "addInitial" && icon === "plus") {
+    iconSrcPath = "/ic/plus-white.svg";
+    iconAlt = "추가 아이콘 (흰색)";
+    iconSize = 16; // 또는 필요한 경우 24로 설정
+  }
+  // 만약 addInitial에서 다른 아이콘을 사용할 경우 해당 아이콘도 흰색이 되도록 iconClassName을 조작해야 합니다.
+  // 여기서는 'plus' 아이콘만 가정합니다.
 
   switch (variant) {
     case "add":
@@ -73,7 +80,6 @@ const Button: React.FC<ButtonProps> = ({
     case "addInitial":
       buttonClassNames.push("btn-add-initial");
       if (!children) {
-        // 텍스트(children)가 없는 경우 (원형 + 아이콘 버튼)
         buttonClassNames.push("btn-icon-only");
       }
       break;
@@ -85,38 +91,63 @@ const Button: React.FC<ButtonProps> = ({
       if (isActive) {
         buttonClassNames.push("active");
       }
-      // 비활성화 상태에서는 cursor: not-allowed는 CSS에서 처리
-      // disabled 속성은 props로 전달
       break;
     case "iconImageAdd":
-    case "iconImageEdit":
-      buttonClassNames.push("btn-icon-image-action");
+      buttonClassNames.push("btn-icon-image-action", "variant-add");
       break;
+    case "iconImageEdit":
+      buttonClassNames.push("btn-icon-image-action", "variant-edit");
+      break;
+  }
+
+  let iconClassName = "";
+  // variant에 따라 iconClassName을 설정하되,
+  // iconSrcPath를 직접 변경했으므로 iconClassName은 이제 해당 variant의 텍스트/아이콘 색상을 따라갑니다.
+  if (variant === "add") {
+    // 'add' variant는 검정색 텍스트/아이콘
+    iconClassName = "icon-color-text-primary";
+  } else if (variant === "addInitial") {
+    // 'addInitial' variant는 흰색 텍스트/아이콘 (plus-white.svg를 사용하므로 이 클래스는 사실상 불필요)
+    // 하지만 일관성을 위해 유지하거나, 만약 plus-white.svg에 currentColor가 있다면 필요합니다.
+    iconClassName = "icon-color-white";
+  } else if (variant === "iconImageAdd") {
+    iconClassName = "icon-color-image-action-add";
+  } else if (variant === "iconImageEdit") {
+    iconClassName = "icon-color-image-action-edit";
+  } else if (variant === "submitSuccess" && isActive) {
+    iconClassName = "icon-color-submit-success-active";
+  } else if (variant === "submitSuccess" && !isActive) {
+    iconClassName = "icon-color-submit-success-inactive";
+  } else {
+    // 그 외의 경우 (예: delete 버튼의 X 아이콘 등)
+    iconClassName = "icon-color-white";
   }
 
   return (
     <button
-      className={`${buttonClassNames.join(" ")} ${className}`} // 클래스 배열을 문자열로 합치고 외부 className 추가
-      disabled={variant === "submitSuccess" && !isActive} // submitSuccess이고 isActive가 false일 때만 disabled
+      className={`${buttonClassNames.join(" ")} ${className}`}
+      disabled={variant === "submitSuccess" && !isActive}
       {...props}
     >
-      {icon && iconPosition === "left" && iconSrc && (
+      {icon && iconPosition === "left" && iconSrcPath && (
         <Image
-          src={iconSrc}
+          src={iconSrcPath}
           alt={iconAlt}
           width={iconSize}
           height={iconSize}
-          className={children ? "mr-2" : ""}
+          style={children ? { marginRight: "4px" } : {}}
+          className={iconClassName}
         />
       )}
       {children}
-      {icon && iconPosition === "right" && iconSrc && (
+      {icon && iconPosition === "right" && iconSrcPath && (
         <Image
-          src={iconSrc}
+          src={iconSrcPath}
           alt={iconAlt}
           width={iconSize}
           height={iconSize}
-          className={children ? "ml-2" : ""}
+          style={children ? { marginLeft: "4px" } : {}}
+          className={iconClassName}
         />
       )}
     </button>
