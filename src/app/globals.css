@@ -1,15 +1,20 @@
-@import "tailwindcss";
+/* src/app/globals.css */
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --slate-900: #0f172a;
+  --slate-800: #1e293b;
+  --slate-500: #64748b;
+  --slate-400: #94a3b8;
+  --slate-300: #cbd5e1;
+  --slate-200: #e2e8f0;
+  --slate-100: #f1f5f9;
+  --violet-600: #7c3aed;
+  --violet-100: #ede9fe;
+  --rose-500: #f43f5e;
+  --lime-300: #bef264;
+  --amber-800: #92400e;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -23,4 +28,103 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* --- Button Component Styles --- */
+
+/* 모든 버튼에 공통적으로 적용될 기본 스타일 */
+.btn-base {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  cursor: pointer;
+  /* transition은 각 버튼 variant별로 hover에 맞춰 개별적으로 줄 수도 있지만, 여기서는 공통 클래스에 추가 */
+  transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out,
+    color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+/* 기본 텍스트 버튼 스타일 (textPrimary) */
+.btn-text-primary {
+  background-color: var(--background); /* 흰색 배경 */
+  color: var(--slate-900);
+  border: 1px solid var(--slate-300);
+  padding: 8px 16px;
+  border-radius: 8px;
+}
+.btn-text-primary:hover {
+  background-color: var(--slate-100);
+}
+
+/* 초기 추가하기 버튼 스타일 (addInitial) */
+.btn-add-initial {
+  background-color: var(--violet-600);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 8px;
+}
+.btn-add-initial:hover {
+  background-color: var(
+    --violet-700
+  ); /* Figma 시안에 hover 컬러가 명시되지 않아 임시로 더 진한 보라색 사용 */
+}
+
+/* addInitial variant의 원형 아이콘 전용 스타일 (텍스트 없는 경우) */
+.btn-add-initial.btn-icon-only {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%; /* 원형 */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* 그림자 */
+  padding: 0; /* 원형 아이콘 버튼은 패딩 제거 */
+}
+.btn-add-initial.btn-icon-only:hover {
+  background-color: var(--violet-700);
+}
+
+/* 삭제하기 버튼 스타일 (delete) */
+.btn-delete {
+  background-color: var(--rose-500);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 8px;
+}
+.btn-delete:hover {
+  background-color: var(
+    --rose-600
+  ); /* Figma 시안에 hover 컬러가 명시되지 않아 임시로 더 진한 붉은색 사용 */
+}
+
+/* 수정 완료 버튼 스타일 (submitSuccess) */
+.btn-submit-success {
+  padding: 8px 16px;
+  border-radius: 8px;
+  color: var(--slate-900); /* 기본 텍스트 색상 */
+}
+.btn-submit-success.active {
+  /* 활성화 상태 */
+  background-color: var(--lime-300);
+}
+.btn-submit-success.active:hover {
+  background-color: var(
+    --lime-400
+  ); /* Figma 시안에 hover 컬러가 명시되지 않아 임시로 더 진한 연두색 사용 */
+}
+.btn-submit-success:not(.active) {
+  /* 비활성화 상태 */
+  background-color: var(--slate-200);
+  color: var(--slate-400);
+  cursor: not-allowed;
+}
+
+/* 상세 페이지 이미지 추가/수정 아이콘 버튼 (iconImageAdd, iconImageEdit) */
+.btn-icon-image-action {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%; /* 원형 */
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* 그림자 */
+  background-color: var(--background); /* 흰색 배경 */
+  padding: 0; /* 패딩 제거 */
+}
+.btn-icon-image-action:hover {
+  background-color: var(--slate-100);
 }

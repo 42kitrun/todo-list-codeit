@@ -1,103 +1,105 @@
-import Image from "next/image";
+// src/app/page.tsx
+"use client"; // 클라이언트 컴포넌트로 지정
+
+import React, { useState } from "react"; // useState 훅을 사용하기 위해 import
+import Button from "../components/Button"; // Button 컴포넌트 import
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [isSubmitActive, setIsSubmitActive] = useState(false); // 수정 완료 버튼 활성화 여부 상태
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+  const handleButtonClick = (buttonName: string) => {
+    alert(`${buttonName} 버튼 클릭됨!`);
+  };
+
+  return (
+    <div
+      style={{
+        padding: "20px",
+        display: "flex",
+        flexDirection: "column",
+        gap: "20px",
+        alignItems: "flex-start",
+        backgroundColor: "var(--background)",
+        minHeight: "100vh",
+      }}
+    >
+      <h1>Button Component Test Page</h1>
+      <p>다양한 버튼 variant 테스트:</p>
+
+      {/* 1. textPrimary (흰 배경 '추가하기' 버튼) */}
+      <Button
+        variant="add"
+        icon="plus"
+        onClick={() => handleButtonClick("기본 추가하기")}
+      >
+        추가하기
+      </Button>
+
+      {/* 2. addInitial (보라색 '추가하기' 버튼 - 텍스트 포함) */}
+      <Button
+        variant="addInitial"
+        icon="plus"
+        onClick={() => handleButtonClick("초기 추가하기 (텍스트)")}
+      >
+        추가하기
+      </Button>
+
+      {/* 3. addInitial (보라색 '추가하기' 버튼 - 아이콘만 - 모바일 버전) */}
+      <Button
+        variant="addInitial"
+        icon="plus"
+        onClick={() => handleButtonClick("초기 추가하기 (아이콘만)")}
+      />
+
+      {/* 4. delete (붉은색 '삭제하기' 버튼) */}
+      <Button
+        variant="delete"
+        icon="x"
+        onClick={() => handleButtonClick("삭제하기")}
+      >
+        삭제하기
+      </Button>
+
+      {/* 5. submitSuccess (수정 완료 버튼 - 활성화/비활성화 테스트) */}
+      <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+        <Button
+          variant="submitSuccess"
+          icon="check"
+          isActive={isSubmitActive}
+          onClick={() => handleButtonClick("수정 완료")}
+          disabled={!isSubmitActive} // isActive가 false일 때 disabled 속성 추가
         >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+          수정 완료
+        </Button>
+        <button
+          onClick={() => setIsSubmitActive(!isSubmitActive)}
+          style={{
+            padding: "5px 10px",
+            backgroundColor: "lightblue",
+            borderRadius: "5px",
+            cursor: "pointer",
+          }}
         >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+          {isSubmitActive ? "비활성화하기" : "활성화하기"}
+        </button>
+      </div>
+
+      {/* 6. iconImageAdd (상세 페이지 이미지 '추가' 버튼) */}
+      <Button
+        variant="iconImageAdd"
+        icon="plus"
+        onClick={() => handleButtonClick("이미지 추가")}
+      />
+
+      {/* 7. iconImageEdit (상세 페이지 이미지 '수정' 버튼) */}
+      <Button
+        variant="iconImageEdit"
+        icon="edit"
+        onClick={() => handleButtonClick("이미지 수정")}
+      />
+
+      {/* 추가적인 테스트를 위한 여백 */}
+      <div style={{ height: "50px" }}></div>
     </div>
   );
 }
