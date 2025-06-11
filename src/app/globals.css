@@ -1,10 +1,5 @@
 /* src/app/globals.css */
 
-/* Tailwind CSS 관련 기본 설정 (없으므로 주석 처리 유지) */
-/* @tailwind base;
-@tailwind components;
-@tailwind utilities; */
-
 /* --- 1. 색상 변수 정의 (root에 정의되어야 합니다) --- */
 :root {
   /* 배경 및 전경색 (시안 (image_b8bac4.png) 의 어두운 회색 배경에 맞춰 조정) */

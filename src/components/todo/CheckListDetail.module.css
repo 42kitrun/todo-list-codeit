@@ -1,0 +1,116 @@
+/* src/components/todo/CheckListDetail.module.css */
+
+.detailContainer {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+  max-width: 700px;
+  margin: 2rem auto;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #333333; /* var(--color-text-dark) */
+  margin-bottom: 1.5rem;
+  word-break: break-word;
+}
+
+.status {
+  font-size: 1.1rem;
+  color: #333333; /* var(--color-text-dark) */
+  margin-bottom: 1rem;
+}
+
+.statusTodo {
+  font-weight: bold;
+  color: #4a90e2; /* var(--color-primary-blue) */
+}
+
+.statusDone {
+  font-weight: bold;
+  color: #7ed321; /* var(--color-accent-green) */
+}
+
+.memo {
+  font-size: 1rem;
+  color: #888888; /* var(--color-text-light) */
+  margin-top: 1rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+.imageWrapper {
+  margin-top: 1.5rem;
+  text-align: center;
+}
+
+.itemImage {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.buttonGroup {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 2rem;
+  gap: 1rem;
+}
+
+.saveButton,
+.deleteButton {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.saveButton {
+  background-color: #4a90e2; /* var(--color-primary-blue) */
+  color: white;
+}
+
+.saveButton:hover {
+  background-color: #3a7ed2;
+}
+
+.deleteButton {
+  background-color: #dc3545;
+  color: white;
+}
+
+.deleteButton:hover {
+  background-color: #c82333;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 767px) {
+  .detailContainer {
+    padding: 1.5rem;
+    margin: 1rem auto;
+    border-radius: 8px;
+  }
+  .title {
+    font-size: 1.6rem;
+    margin-bottom: 1rem;
+  }
+  .status,
+  .memo {
+    font-size: 0.95rem;
+  }
+  .buttonGroup {
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+  .saveButton,
+  .deleteButton {
+    width: 100%;
+    padding: 0.6rem 1.2rem;
+  }
+}
