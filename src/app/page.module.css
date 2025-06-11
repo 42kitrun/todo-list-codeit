@@ -1,0 +1,74 @@
+/* src/app/page.module.css */
+
+.mainContainer {
+  max-width: 567px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.divider {
+  border: none;
+  border-top: 2px solid var(--slate-900); /* globals.css의 변수 사용 */
+  margin: 40px 0;
+}
+
+.filterButtonContainer {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.filterButton {
+  background-color: var(--slate-200); /* 비활성화 상태 */
+  color: var(--slate-900); /* 텍스트 색상 */
+  padding: 8px 16px;
+  border-radius: 24px;
+  border: 2px solid var(--slate-900); /* 테두리 색상 */
+  font-weight: 700; /* NanumSquare Bold */
+  font-size: 16px; /* NanumSquare Bold 16px */
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.filterButton.filterActive {
+  background-color: var(--lime-300); /* 활성화 상태 */
+  border-color: var(--lime-300); /* 활성화 상태 테두리 */
+}
+
+.filterButton:hover:not(.filterActive) {
+  background-color: var(--slate-300); /* 비활성화 상태 호버 */
+}
+
+.filterButton.filterActive:hover {
+  background-color: #a4cc49; /* 활성화 상태 호버 (lime-300보다 살짝 어둡게) */
+  border-color: #a4cc49;
+}
+
+.checkListContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.emptyStateContainer {
+  text-align: center;
+  margin-top: 50px;
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-bottom: 20px;
+}
+
+.emptyStateColumn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.emptyStateText {
+  color: var(--slate-500); /* 텍스트 색상 */
+  font-size: 14px;
+  font-weight: 400; /* NanumSquare Regular */
+  margin-top: 10px;
+  line-height: 1.4;
+}

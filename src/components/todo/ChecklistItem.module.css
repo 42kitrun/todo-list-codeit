@@ -1,63 +1,66 @@
-/* src/components/todo/ChecklistItem.module.css */
+/* src/components/todo/CheckListItem.module.css */
 
-/* ChecklistItem 컴포넌트의 컨테이너 스타일 */
-.checklist_item {
+.checklistItem {
   display: flex;
   align-items: center;
-  gap: 10px;
-  background-color: var(--white);
-  border: 2px solid var(--slate-900);
-  border-radius: 27px;
-  padding: 9px 16px;
-  width: 100%;
-  max-width: 527px;
-  min-height: 50px;
-  box-shadow: none;
-  transition: background-color 0.3s ease, border-color 0.3s ease,
-    box-shadow 0.3s ease;
-  cursor: pointer; /* 클릭 가능하도록 */
+  gap: 12px; /* 체크박스와 제목 사이 간격 */
+  padding: 16px 20px; /* 시안 (image_3c3923.png) 의 아이템 패딩 */
+  border-radius: 28px; /* 시안 (image_3cad02.png) 의 둥근 모서리 */
+  background-color: var(--white); /* 기본 배경 흰색 */
+  border: 2px solid var(--slate-900); /* 기본 테두리 slate/900 */
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out,
+    box-shadow 0.2s ease-in-out;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* 시안 (image_225033.png) 의 그림자 */
+  width: 100%; /* 부모에 따라 너비 조절 */
+  max-width: 360px; /* 시안 (image_150a55.png) 의 목록 아이템 너비 고려 */
+  box-sizing: border-box; /* 패딩, 보더 포함 너비 계산 */
 }
 
-/* 완료된 할 일 아이템 스타일 (item.status === "DONE"일 때 적용) */
-.completed {
-  background-color: var(--violet-100); /* 완료 시 연보라색 배경 */
-  border-color: var(--violet-100); /* 완료 시 테두리 색상도 배경색과 동일 */
+.checklistItem.done {
+  background-color: var(--violet-100); /* 완료 시 violet/100 배경 */
+  border-color: var(--violet-600); /* 완료 시 violet/600 테두리 */
 }
 
-/* 체크박스 버튼 스타일 */
-.checklist_checkbox_button {
-  background: none;
-  border: none;
+.checklistItem:hover {
+  background-color: var(--slate-100); /* 호버 시 slate/100 */
+}
+
+.checklistItem.done:hover {
+  background-color: #e6e3fb; /* 완료 상태 호버 시 (violet/100보다 살짝 어둡게) */
+}
+
+.checkbox {
+  flex-shrink: 0; /* 체크박스가 줄어들지 않도록 */
+  width: 24px; /* Image 크기와 일치 */
+  height: 24px; /* Image 크기와 일치 */
   padding: 0;
+  border: none;
+  background: none;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--slate-900); /* 기본 체크박스 테두리 색상 */
-  flex-shrink: 0; /* 내용이 줄어들 때 체크박스 크기 유지 */
 }
 
-.completed .checklist_checkbox_button {
-  color: var(--white); /* 완료 시 체크박스 아이콘 색상 (SVG fill) */
+.checkboxIcon {
+  /* Image 컴포넌트 자체의 크기는 width/height로 지정되므로 여기에 추가 스타일은 최소화 */
+  display: block; /* 가끔 Image 컴포넌트가 inline으로 렌더링될 때 발생하는 미세한 여백 제거 */
 }
 
-/* 할 일 텍스트 스타일 */
-.checklist_item_text {
-  flex-grow: 1;
-  font-family: var(--font-nanum-square-regular), sans-serif;
-  font-size: 16px;
-  color: var(--slate-900);
-  word-break: break-word;
-  transition: color 0.3s ease, text-decoration 0.3s ease;
+.title {
+  flex-grow: 1; /* 제목이 남은 공간을 차지하도록 */
+  font-family: var(--font-nanum-square-bold), sans-serif; /* NanumSquare Bold 폰트 적용 */
+  font-weight: 700; /* NanumSquare Bold */
+  font-size: 16px; /* 시안 폰트 크기 */
+  line-height: 100%;
+  color: var(--slate-900); /* 기본 텍스트 색상 slate/900 */
+  white-space: nowrap; /* 텍스트가 줄바꿈되지 않도록 */
+  overflow: hidden; /* 넘치는 텍스트 숨김 */
+  text-overflow: ellipsis; /* 넘치는 텍스트에 ... 표시 */
 }
 
-/* 완료된 할 일 텍스트 스타일 */
-.checklist_item_text.completed {
-  color: var(--slate-500); /* 완료 시 텍스트 색상 변경 */
-  text-decoration: line-through;
-}
-
-/* 호버 효과 (ChecklistItem 전체) */
-.checklist_item:hover {
-  border-color: var(--violet-500); /* 호버 시 보라색 테두리 */
+.checklistItem.done .title {
+  text-decoration: line-through; /* 완료 시 취소선 */
+  color: var(--slate-500); /* 완료 시 slate/500 색상 */
 }

@@ -1,32 +1,29 @@
 /* src/components/common/Search.module.css */
 
-.searchForm {
-  display: flex; /* input과 버튼을 가로로 정렬 */
+.searchContainer {
+  display: flex; /* 가로로 배치 */
+  gap: 16px; /* input과 버튼 사이 간격 */
   align-items: center; /* 세로 중앙 정렬 */
-  gap: 12px; /* input과 버튼 사이 간격 */
-  width: 100%; /* 부모 요소에 맞춰 너비 확장 */
-  max-width: 527px; /* 시안처럼 최대 너비 설정 (옵션) */
-  background-color: var(--background); /* 배경색 설정 (전역 변수 사용) */
-  border-radius: 8px; /* 둥근 모서리 */
-  box-shadow: var(--shadow-small); /* 그림자 효과 (옵션) */
-  padding: 8px 16px; /* 내부 패딩 */
+  width: 100%; /* 부모에 맞춰 너비 차지 */
 }
 
 .searchInput {
-  flex-grow: 1; /* 남은 공간을 모두 차지하도록 확장 */
-  padding: 10px 14px; /* 입력 필드 내부 패딩 */
-  border: 1px solid var(--border-color); /* 테두리 색상 (전역 변수 사용) */
-  border-radius: 6px; /* 입력 필드의 둥근 모서리 */
-  font-size: 1rem;
-  color: var(--foreground); /* 텍스트 색상 */
-  background-color: var(--input-background); /* 입력 필드 배경색 */
-  outline: none; /* 포커스 시 기본 아웃라인 제거 */
+  flex-grow: 1; /* 남은 공간을 input이 채우도록 */
+  padding: 12px 16px; /* 내부 패딩 */
+  border: 2px solid var(--slate-900); /* 테두리 */
+  border-radius: 24px; /* 둥근 모서리 */
+  background-color: var(--white); /* 배경색 */
+  color: var(--text-primary); /* 텍스트 색상 */
+  font-size: 16px; /* 폰트 크기 */
+  font-weight: 400; /* NanumSquare Regular */
+  box-sizing: border-box; /* 패딩이 너비에 포함되도록 */
+  outline: none; /* 포커스 시 기본 외곽선 제거 */
 }
 
 .searchInput::placeholder {
-  color: var(--placeholder-color); /* 플레이스홀더 색상 */
+  color: var(--text-placeholder); /* 플레이스홀더 색상 */
 }
 
-/* Button 컴포넌트는 자체 CSS를 가집니다. */
-/* 필요한 경우 버튼과 input의 높이를 맞추기 위해 .searchForm에 align-items: center;를 사용하거나,
-   Button 컴포넌트의 variant에 따라 높이를 조정할 수 있습니다. */
+.searchInput:focus {
+  border-color: var(--violet-600); /* 포커스 시 테두리 색상 변경 */
+}
