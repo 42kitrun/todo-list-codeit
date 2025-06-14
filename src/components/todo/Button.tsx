@@ -2,13 +2,13 @@
 
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import styles from "./Button.module.css"; // CSS Modules 임포트 추가
+import styles from "./Button.module.css";
 
 type ButtonVariant =
-  | "add" // 할 일 목록이 있을 때 (흰색 배경, 검정 텍스트/아이콘)
-  | "addInitial" // 할 일 목록이 없을 때 (보라색 배경, 흰색 텍스트/아이콘)
+  | "add"
+  | "addInitial"
   | "delete"
   | "submitSuccess"
   | "detailImageAdd"
@@ -31,7 +31,24 @@ const Button: React.FC<ButtonProps> = ({
   isActive = true,
   ...props
 }) => {
-  const buttonClassNames = [styles.btnBase]; // CSS Modules 사용
+  const [isMobileView, setIsMobileView] = useState(false);
+
+  const TABLET_MIN_WIDTH_FOR_JS = 376;
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobileView(window.innerWidth < TABLET_MIN_WIDTH_FOR_JS);
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  const buttonClassNames = [styles.btnBase];
 
   let iconSrcPath: string | null = null;
   let iconAlt: string = "";
@@ -39,22 +56,24 @@ const Button: React.FC<ButtonProps> = ({
 
   switch (icon) {
     case "plus":
-      // 'add' variant에서는 검정색 '+', 'addInitial'에서는 흰색 '+'
       if (variant === "addInitial") {
         iconSrcPath = "/ic/plus-white.svg";
         iconAlt = "추가 아이콘 (흰색)";
       } else {
-        iconSrcPath = "/ic/plus.svg";
+        iconSrcPath = "/ic/plus.svg"; // 검정색 플러스 아이콘
         iconAlt = "추가 아이콘";
       }
+      iconSize = 16;
       break;
     case "x":
       iconSrcPath = "/ic/X.svg";
       iconAlt = "닫기/삭제 아이콘";
+      iconSize = 16;
       break;
     case "check":
       iconSrcPath = "/ic/check.svg";
       iconAlt = "체크 아이콘";
+      iconSize = 16;
       break;
     case "edit":
       iconSrcPath = "/ic/edit.svg";
@@ -62,26 +81,26 @@ const Button: React.FC<ButtonProps> = ({
       iconSize = 24;
       break;
     case "plusLarge":
-      iconSrcPath = "/ic/plus-large.svg";
+      iconSrcPath = "/ic/plus.svg";
       iconAlt = "이미지 추가 아이콘";
-      iconSize = 24;
+      iconSize = 16;
       break;
     default:
       iconSrcPath = null;
       iconAlt = "";
   }
 
+  // 각 variant에 따라 버튼 스타일 클래스 추가
   switch (variant) {
     case "add":
-      buttonClassNames.push(styles.btnAdd); // 새로운 클래스 추가
-      if (!children) {
-        // 텍스트가 없는 경우 (아이콘만 있는 경우)
-        buttonClassNames.push(styles.btnIconOnly); // 아이콘만 있는 버튼 스타일
+      buttonClassNames.push(styles.btnAdd);
+      if (isMobileView) {
+        buttonClassNames.push(styles.btnIconOnly);
       }
       break;
     case "addInitial":
       buttonClassNames.push(styles.btnAddInitial);
-      if (!children) {
+      if (isMobileView) {
         buttonClassNames.push(styles.btnIconOnly);
       }
       break;
@@ -93,7 +112,7 @@ const Button: React.FC<ButtonProps> = ({
       if (isActive) {
         buttonClassNames.push(styles.active);
       } else {
-        buttonClassNames.push(styles.inactive); // 비활성화 상태 클래스 추가
+        buttonClassNames.push(styles.inactive);
       }
       break;
     case "detailImageAdd":
@@ -110,32 +129,52 @@ const Button: React.FC<ButtonProps> = ({
       break;
   }
 
+  const shouldRenderChildren = children && !isMobileView;
+
+  const iconClass = `${styles.icon} ${
+    shouldRenderChildren ? styles.iconMarginRight : ""
+  }`;
+
+  // ⭐ 새로운 변수: buttonShadowBackground를 렌더링할지 여부 결정 ⭐
+  const shouldRenderShadow =
+    variant !== "detailImageAdd" && variant !== "detailImageEdit";
+
   return (
-    <button
-      className={`${buttonClassNames.join(" ")} ${className}`}
-      disabled={variant === "submitSuccess" && !isActive}
-      {...props}
-    >
-      {icon && iconPosition === "left" && iconSrcPath && (
-        <Image
-          src={iconSrcPath}
-          alt={iconAlt}
-          width={iconSize}
-          height={iconSize}
-          className={`${styles.icon} ${children ? styles.iconMarginRight : ""}`} // 클래스 추가
-        />
+    <div className={`${styles.buttonWrapper} ${className}`}>
+      {shouldRenderShadow && ( // ⭐ 조건부 렌더링 추가 ⭐
+        <div className={styles.buttonShadowBackground}></div>
       )}
-      {children}
-      {icon && iconPosition === "right" && iconSrcPath && (
-        <Image
-          src={iconSrcPath}
-          alt={iconAlt}
-          width={iconSize}
-          height={iconSize}
-          className={`${styles.icon} ${children ? styles.iconMarginLeft : ""}`} // 클래스 추가
-        />
-      )}
-    </button>
+      <button
+        className={buttonClassNames.join(" ")}
+        // disabled={variant === "submitSuccess" && !isActive} // ⭐ 이 줄을 주석 처리하거나 삭제 ⭐
+        // 만약 submitSuccess 버튼만 항상 활성화하고 싶다면
+        // disabled={props.disabled || (variant === "submitSuccess" ? false : !isActive)}
+        // 아니면 다른 variant의 disabled 로직만 유지
+        {...props}
+      >
+        {icon && iconPosition === "left" && iconSrcPath && (
+          <Image
+            src={iconSrcPath}
+            alt={iconAlt}
+            width={iconSize}
+            height={iconSize}
+            className={iconClass}
+          />
+        )}
+        {shouldRenderChildren && children}
+        {icon && iconPosition === "right" && iconSrcPath && (
+          <Image
+            src={iconSrcPath}
+            alt={iconAlt}
+            width={iconSize}
+            height={iconSize}
+            className={`${styles.icon} ${
+              shouldRenderChildren ? styles.iconMarginLeft : ""
+            }`}
+          />
+        )}
+      </button>
+    </div>
   );
 };
 

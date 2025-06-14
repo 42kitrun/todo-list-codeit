@@ -1,158 +1,75 @@
 /* src/components/todo/CheckListDetail.module.css */
 
-.detailContainer {
-  background-color: var(--background); /* 시안의 slate/800 */
-  padding: 24px;
-  border-radius: 8px;
-  box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.4);
-  width: 100%;
-  max-width: 400px; /* 적절한 최대 너비 설정 (시안의 모달 폭 고려) */
-  margin: 0 auto; /* 중앙 정렬 */
+.checklistItem {
   display: flex;
-  flex-direction: column;
-  gap: 20px; /* 요소들 간의 간격 */
-  position: relative; /* 닫기 버튼 위치 지정을 위해 */
-  color: var(--text-primary); /* 기본 텍스트 색상 */
+  flex-direction: column; /* 항목 내용을 세로로 정렬 */
+  align-items: center; /* 자식 요소들을 왼쪽으로 정렬 */
+  gap: 12px; /* 섹션 간의 간격 */
+  padding: 16px 20px; /* 아이템 패딩 */
+  border-radius: 24px; /* 둥근 모서리 */
+  background-color: var(--white); /* 기본 배경 흰색 */
+  border: 2px solid var(--slate-900); /* 기본 테두리 slate/900 */
+  /* cursor: pointer; // 전체 항목 클릭 이벤트가 이제 없으므로 제거 또는 필요시 유지 */
+  transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out,
+    box-shadow 0.2s ease-in-out;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* 그림자 */
+  width: 100%; /* 부모에 따라 너비 조절 */
+  max-width: 996px; /* 최대 너비 */
+  box-sizing: border-box; /* 패딩, 보더 포함 너비 계산 */
 }
 
-.closeButton {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  /* Button 컴포넌트의 .btnIconOnly (56x56 원형) 스타일을 따르므로 별도 width/height 지정 필요 없음 */
-  /* Button.module.css의 btnDelete variant의 X 아이콘과 동일하게 보임 (시안 image_324493.png 참고) */
+.checklistItem.done {
+  background-color: var(--violet-100); /* 완료 시 violet/100 배경 */
+}
+
+/* 호버 효과는 전체 .checklistItem에 적용 */
+.checklistItem:hover {
+  background-color: var(--slate-100); /* 호버 시 slate/100 */
+}
+
+.checklistItem.done:hover {
+  background-color: #e6e3fb; /* 완료 상태 호버 시 (violet/100보다 살짝 어둡게) */
+}
+
+.topSection {
+  display: flex;
+  align-items: center; /* 수직 가운데 정렬 */
+  gap: 12px; /* 체크박스와 입력 필드 사이 간격 */
+  width: 100%; /* 부모 너비 전체 사용 */
+}
+
+.checkbox {
+  flex-shrink: 0; /* 체크박스가 줄어들지 않도록 */
+  width: 32px; /* Image 크기와 일치 */
+  height: 32px; /* Image 크기와 일치 */
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.checkboxIcon {
+  display: block;
 }
 
 .titleInput {
-  width: 100%;
-  padding: 12px 16px;
-  border: 2px solid var(--slate-900); /* slate/900 테두리 */
-  border-radius: 8px; /* 시안 (image_3da182.png) 에 맞춰 덜 둥글게 */
-  background-color: var(--white);
-  color: var(--text-primary); /* slate/900 */
-  font-size: 20px; /* 시안 폰트 크기 (image_2e0f15.png) */
-  font-weight: 700; /* NanumSquare Bold */
-  box-sizing: border-box;
-}
-.titleInput::placeholder {
-  color: var(--text-placeholder); /* slate/400 */
-}
-
-.statusSection {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.statusLabel {
-  font-size: 16px;
-  font-weight: 700; /* NanumSquare Bold */
-  color: var(--text-primary); /* slate/900 */
+  flex-grow: 1; /* 입력 필드가 남은 공간을 차지하도록 */
+  font-family: var(--font-nanum-square-bold), sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 100%;
+  color: var(--slate-900);
+  border: none; /* 기본 테두리 제거 */
+  background: transparent; /* 배경 투명 */
+  outline: none; /* 포커스 시 외곽선 제거 */
+  padding: 0; /* 기본 패딩 제거 */
+  /* text-decoration: underline; // 시안에 따라 필요시 추가 */
 }
 
-/* 할 일 이미지 섹션 */
-.todoImageSection {
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* 내부 요소 중앙 정렬 */
-  gap: 12px;
-  margin-top: 10px;
-}
-
-.imagePreviewWrapper {
-  position: relative;
-  width: 100%;
-  max-width: 280px; /* 시안 (image_225033.png) 의 이미지 크기 고려 */
-  height: 180px; /* 시안 (image_225033.png) 의 이미지 크기 고려 */
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-  display: flex; /* 이미지 중앙 정렬용 */
-  justify-content: center;
-  align-items: center;
-  background-color: var(--slate-100); /* 이미지 없을 때 대비 배경 */
-}
-
-.uploadedImage {
-  width: 100%;
-  height: 100%;
-  object-fit: cover; /* 이미지가 영역을 채우도록 */
-  border-radius: 8px;
-}
-
-.imageActionButton {
-  position: absolute; /* 이미지 위에 오버레이 */
-  bottom: 12px;
-  right: 12px;
-  z-index: 10;
-  /* Button 컴포넌트의 .btnIconImageAction 스타일을 따름 */
-  /* 시안 (image_23b0f5.png) 의 연필 아이콘 버튼처럼 원형, 그림자 유지 */
-}
-
-.noImagePlaceholder {
-  width: 100%;
-  max-width: 280px; /* 이미지 미리보기와 동일한 너비 */
-  height: 180px; /* 이미지 미리보기와 동일한 높이 */
-  border: 2px dashed var(--slate-400); /* 시안 (image_225033.png) 의 점선 테두리 */
-  border-radius: 8px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  color: var(--slate-400); /* 시안 (image_242534.png) 의 slate/400 */
-  font-size: 14px;
-  font-weight: 500;
-  box-sizing: border-box; /* 패딩 포함 */
-}
-
-.imagePlaceholderText {
-  font-size: 14px; /* 시안 폰트 크기 */
-  color: var(--slate-400); /* 시안 (image_242534.png) 의 slate/400 */
-  font-weight: 400; /* NanumSquare Regular */
-}
-
-/* 메모 섹션 - memo.svg 배경 적용 */
-.memoSection {
-  position: relative;
-  padding: 0; /* textarea 자체 패딩을 사용할 것이므로 제거 */
-  border-radius: 8px;
-  /* memo.svg를 배경으로 사용 */
-  background-image: url("/img/memo.svg"); /* public/img/memo.svg 경로 */
-  background-repeat: no-repeat;
-  background-position: center; /* 필요에 따라 조절 */
-  background-size: cover; /* 배경이 요소를 덮도록 (필요시 contain 또는 특정 크기) */
-  /* 배경 이미지의 색상이 너무 밝으면 filter를 사용하거나 SVG 자체를 수정해야 할 수 있습니다. */
-  /* 시안 (image_225033.png) 에서 메모 배경이 불투명하므로 투명도 조절 필요 */
-  background-color: var(
-    --white
-  ); /* memo.svg가 투명 배경이라면 흰색을 채워야 할 수 있음 */
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* 시안 (image_225033.png) 의 메모 박스 그림자 */
-  /* 시안에 맞춰 메모 입력 필드 자체의 배경과 동일하게 맞추는 것이 자연스러움 */
-  border: 2px solid var(--slate-900); /* 시안 (image_225033.png) 의 메모 테두리 */
-  box-sizing: border-box;
-}
-
-.memoInput {
-  width: 100%;
-  padding: 12px 16px;
-  border: none; /* 부모 .memoSection에서 테두리를 처리하므로 */
-  border-radius: 8px; /* 부모와 동일하게 */
-  background-color: transparent; /* 배경 이미지가 보이도록 투명 설정 */
-  color: var(--text-primary); /* slate/900 */
-  font-size: 16px; /* 시안 폰트 크기 */
-  font-weight: 400; /* NanumSquare Regular */
-  box-sizing: border-box;
-  resize: vertical; /* 세로 크기 조절 가능 */
-  min-height: 180px; /* 시안 (image_225033.png) 에서 메모의 높이 고려 */
-  line-height: 1.5; /* 가독성을 위한 줄 간격 */
-}
-.memoInput::placeholder {
-  color: var(--text-placeholder); /* slate/400 */
-}
-
-.buttonGroup {
-  display: flex;
-  justify-content: center;
-  gap: 16px;
-  margin-top: 20px;
-}
+/* 다음 CSS 클래스들은 더 이상 사용되지 않아 제거되었습니다:
+  .imageSection
+  .itemImage
+*/

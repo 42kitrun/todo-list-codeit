@@ -13,13 +13,11 @@
     box-shadow 0.2s ease-in-out;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* 시안 (image_225033.png) 의 그림자 */
   width: 100%; /* 부모에 따라 너비 조절 */
-  max-width: 360px; /* 시안 (image_150a55.png) 의 목록 아이템 너비 고려 */
   box-sizing: border-box; /* 패딩, 보더 포함 너비 계산 */
 }
 
 .checklistItem.done {
   background-color: var(--violet-100); /* 완료 시 violet/100 배경 */
-  border-color: var(--violet-600); /* 완료 시 violet/600 테두리 */
 }
 
 .checklistItem:hover {

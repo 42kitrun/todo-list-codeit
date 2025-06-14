@@ -1,33 +1,26 @@
 // src/app/layout.tsx
-
-import type { Metadata } from "next";
-import "./globals.css";
-import Gnb from "../components/common/Gnb";
-
-// Next.js 로컬 폰트 설정
+import type { Metadata } from "next/types";
 import localFont from "next/font/local";
+import "./globals.css"; // 전역 스타일 임포트
+import Gnb from "@/components/common/Gnb"; // Gnb 컴포넌트 임포트
+import styles from "./layout.module.css"; // 새로운 layout.module.css 임포트
 
-// public/fonts 디렉토리에 있는 NanumSquareB.ttf (Bold)와 NanumSquareR.ttf (Regular) 파일을 사용
-const nanumSquare = localFont({
-  src: [
-    {
-      path: "../../public/fonts/NanumSquareR.ttf", // Regular 폰트 파일 경로
-      weight: "400", // 시안에 'Regular'로 명시된 폰트 웨이트
-      style: "normal",
-    },
-    {
-      path: "../../public/fonts/NanumSquareB.ttf", // Bold 폰트 파일 경로
-      weight: "700", // 시안에 'Bold'로 명시된 폰트 웨이트
-      style: "normal",
-    },
-  ],
-  variable: "--font-nanum-square", // CSS 변수 이름 설정
-  display: "swap", // 폰트 로딩 전략
+// NanumSquare 폰트 로드
+const nanumSquareR = localFont({
+  src: "../../public/fonts/NanumSquareR.ttf",
+  display: "swap",
+  variable: "--font-nanum-square-regular",
+});
+
+const nanumSquareB = localFont({
+  src: "../../public/fonts/NanumSquareB.ttf",
+  display: "swap",
+  variable: "--font-nanum-square-bold",
 });
 
 export const metadata: Metadata = {
-  title: "Do it;", // todo-list-codeit 프로젝트 이름
-  description: "할 일 목록 관리 앱",
+  title: "Todo-List Codeit",
+  description: "Codeit Assignment - Todo List Application",
 };
 
 export default function RootLayout({
@@ -36,8 +29,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    // 폰트 변수를 <html> 태그의 className으로 적용
-    <html lang="ko" className={nanumSquare.variable}>
+    <html
+      lang="ko"
+      className={`${nanumSquareR.variable} ${nanumSquareB.variable}`}
+    >
       <body>
         <Gnb />
         {children}

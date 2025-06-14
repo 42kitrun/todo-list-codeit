@@ -1,0 +1,210 @@
+/* src/app/[itemId]/page.module.css */
+
+.container {
+  background-color: var(--background);
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* ------------------------------------------------------------- */
+/* .mainContent (Mobile First) */
+/* ------------------------------------------------------------- */
+.mainContent {
+  padding: 24px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column; /* 기본은 세로 정렬 */
+  align-items: center;
+  gap: 24px;
+}
+
+/* 로딩 및 에러 메시지 스타일 */
+.loadingErrorState {
+  text-align: center;
+  padding: 50px;
+  font-size: 1.2em;
+  color: var(--text-secondary);
+}
+
+/* ============================================================= */
+/* 이미지 섹션 스타일 (필수 사항으로 변경) */
+/* ============================================================= */
+.imageInputContainer {
+  position: relative; /* 자식 요소의 absolute 포지셔닝을 위해 */
+  width: 100%;
+  max-width: 996px; /* TodoListItem 및 Memo와 동일한 최대 너비 */
+  height: 311px; /* 고정 높이 */
+  border-radius: 24px;
+  overflow: hidden; /* 이미지나 placeholder가 둥근 모서리 밖으로 나가지 않도록 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  background-color: var(--slate-100); /* 배경색 지정 */
+}
+
+/* 이미지가 없을 때의 플레이스홀더 박스 */
+.imagePlaceholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 2px dashed var(--slate-300); /* 점선 테두리 */
+  cursor: pointer;
+  position: relative; /* + 버튼 위치 지정을 위해 */
+}
+
+.imageAddButton {
+  position: absolute;
+  bottom: 24px; /* 시안과 동일하게 하단 오른쪽 위치 */
+  right: 24px; /* 시안과 동일하게 하단 오른쪽 위치 */
+  z-index: 10; /* 다른 요소 위에 오도록 */
+}
+
+/* 이미지가 업로드되었을 때의 이미지 스타일 */
+.uploadedImage {
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  border-radius: 12px; /* 이미지 자체의 둥근 모서리 */
+  display: block;
+}
+
+/* 이미지가 있을 때 수정/삭제 버튼 그룹 */
+.imageButtons {
+  position: absolute;
+  bottom: 24px;
+  right: 24px;
+  display: flex;
+  gap: 8px; /* 버튼 사이 간격 */
+  z-index: 10;
+}
+
+/* ============================================================= */
+/* Memo Section 스타일 (이전 Memo.module.css 내용 통합) */
+/* ============================================================= */
+.memoContainer {
+  position: relative;
+  width: 100%; /* 너비 유동적 */
+  max-width: 996px; /* TodoListItem 및 Memo와 동일한 최대 너비 */
+  height: 311px; /* ⭐ 높이 311px로 고정 ⭐ */
+  border-radius: 24px; /* ⭐ border-radius 24px 적용 ⭐ */
+  overflow: hidden;
+  margin-top: 24px; /* 모바일/태블릿에서만 적용될 여백 */
+  padding: 0;
+
+  background-image: url("/img/memo.svg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.memoTitle {
+  position: relative;
+  z-index: 1;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-family: var(--font-nanum-square-extra-bold), sans-serif;
+  font-weight: 800;
+  font-size: 20px;
+  color: var(--amber-800);
+}
+
+.memoTextarea {
+  position: relative;
+  z-index: 1;
+  margin: 16px 20px 20px 20px;
+  width: auto; /* 부모 flex 아이템에 맞춰 조정될 수 있도록 auto */
+  flex-grow: 1; /* 남은 공간을 채우도록 함 */
+  padding: 12px;
+  border: none;
+  background-color: transparent;
+  outline: none;
+  resize: none;
+  font-family: var(--font-nanum-square-regular), sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 140%;
+  color: var(--slate-900);
+}
+
+/* ============================================================= */
+/* Button Group */
+/* ============================================================= */
+.buttonGroup {
+  display: flex;
+  gap: 16px;
+  width: 100%;
+  max-width: 996px;
+  justify-content: center;
+}
+
+/* ============================================================= */
+/* 반응형 디자인 */
+/* ============================================================= */
+/* 태블릿 (min-width 부터 시작) */
+@media (min-width: var(--tablet-min-width)) {
+  .mainContent {
+    padding: 32px 32px;
+    gap: 32px;
+  }
+
+  .memoContainer {
+    margin-top: 32px; /* 태블릿에서 top margin 조정 */
+  }
+}
+
+/* 데스크톱 (min-width 부터 시작) */
+@media (min-width: var(--desktop-min-width)) {
+  .mainContent {
+    padding: 32px 20px;
+    gap: 20px; /* 이미지 컨테이너와 메모 컨테이너 사이 간격 */
+    flex-direction: row; /* ⭐ 가로 정렬 ⭐ */
+    align-items: flex-start; /* 상단 정렬 */
+    justify-content: center; /* 가운데 정렬 (양쪽 여백 균등하게) */
+  }
+
+  .imageInputContainer,
+  .memoContainer {
+    /* 데스크톱에서 각각의 너비를 지정하여 나란히 배치될 수 있도록 합니다. */
+    /* 예시: 49.5%로 설정하고 gap을 1%로 주어 총 100%를 맞춥니다. */
+    width: calc(
+      50% - 10px
+    ); /* mainContent의 gap이 20px이므로, 절반으로 나눠 10px씩 뺍니다. */
+    max-width: unset; /* 더 이상 최대 너비 제한이 필요 없음 */
+    margin-top: 0; /* 가로 정렬 시 세로 마진 제거 */
+  }
+
+  .memoContainer {
+    /* memoContainer의 높이를 imageInputContainer와 맞춥니다 */
+    height: 311px; /* 필요시 이 값을 imageInputContainer와 동일하게 유지 */
+  }
+
+  /* 데스크톱에서 Memo 텍스트 영역의 높이 조정 */
+  .memoTextarea {
+    height: calc(
+      100% - 60px - 36px
+    ); /* 전체 높이 - memoTitle 높이 - 위아래 margin */
+    box-sizing: border-box; /* padding이 높이에 포함되도록 */
+  }
+
+  .buttonGroup {
+    width: 100%; /* 부모 너비를 따라가게 */
+    max-width: 1200px; /* 전체 컨텐츠 최대 너비에 맞춤 */
+    margin-top: 40px; /* 이미지/메모 섹션 아래에 여백 추가 */
+    justify-content: flex-end; /* 오른쪽 정렬 */
+  }
+}

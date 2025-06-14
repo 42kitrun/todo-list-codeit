@@ -1,74 +1,188 @@
 /* src/app/page.module.css */
 
-.mainContainer {
-  max-width: 567px;
-  margin: 0 auto;
-  padding: 20px;
+.container {
+  background-color: var(--background);
+  width: 100%; /* 부모(appContainer)의 100%를 따름 */
+  max-width: none; /* 상위 appContainer가 max-width를 가지므로 여기서는 제한 없음 */
+  margin: 0; /* 마진 제거 */
+  padding: 0; /* 패딩 제거 */
 }
 
-.divider {
-  border: none;
-  border-top: 2px solid var(--slate-900); /* globals.css의 변수 사용 */
-  margin: 40px 0;
-}
-
-.filterButtonContainer {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
-}
-
-.filterButton {
-  background-color: var(--slate-200); /* 비활성화 상태 */
-  color: var(--slate-900); /* 텍스트 색상 */
-  padding: 8px 16px;
-  border-radius: 24px;
-  border: 2px solid var(--slate-900); /* 테두리 색상 */
-  font-weight: 700; /* NanumSquare Bold */
-  font-size: 16px; /* NanumSquare Bold 16px */
-  cursor: pointer;
-  transition: background-color 0.2s, border-color 0.2s;
-}
-
-.filterButton.filterActive {
-  background-color: var(--lime-300); /* 활성화 상태 */
-  border-color: var(--lime-300); /* 활성화 상태 테두리 */
-}
-
-.filterButton:hover:not(.filterActive) {
-  background-color: var(--slate-300); /* 비활성화 상태 호버 */
-}
-
-.filterButton.filterActive:hover {
-  background-color: #a4cc49; /* 활성화 상태 호버 (lime-300보다 살짝 어둡게) */
-  border-color: #a4cc49;
-}
-
-.checkListContainer {
+/* ------------------------------------------------------------- */
+/* .mainContent (Mobile First) */
+/* ------------------------------------------------------------- */
+.mainContent {
+  /* background-color: azure; */ /* 확인용 배경색 제거 */
+  padding: 24px 20px; /* 모바일 시안 (image_367d74.png) 패딩: 상 24px, 좌우 20px */
+  max-width: 1200px; /* 데스크톱 시안의 전체 콘텐츠 너비 */
+  margin: 0 auto; /* 중앙 정렬 */
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 24px; /* 모바일 시안 (image_367d74.png) 섹션 간의 간격 */
 }
 
-.emptyStateContainer {
-  text-align: center;
-  margin-top: 50px;
-  display: flex;
-  justify-content: center;
-  gap: 40px;
-  margin-bottom: 20px;
+/* 태블릿 (min-width 부터 시작) */
+@media (min-width: var(--tablet-min-width)) {
+  .mainContent {
+    padding: 32px 32px; /* 태블릿 시안 패딩: 상 32px, 좌우 32px */
+    gap: 32px; /* 태블릿 섹션 간의 간격 */
+  }
 }
 
-.emptyStateColumn {
+/* 데스크톱 (min-width 부터 시작) */
+@media (min-width: var(--desktop-min-width)) {
+  .mainContent {
+    padding: 32px 20px; /* 데스크톱 시안의 패딩 */
+    gap: 40px; /* 데스크톱 섹션 간의 간격 */
+  }
+}
+
+/* ------------------------------------------------------------- */
+/* Search와 버튼 컨테이너 (모든 해상도에서 동일) */
+/* ------------------------------------------------------------- */
+.searchAndButtonContainer {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
+  width: 100%;
+  gap: 10px; /* 검색창과 버튼 사이 간격 */
 }
 
-.emptyStateText {
-  color: var(--slate-500); /* 텍스트 색상 */
-  font-size: 14px;
-  font-weight: 400; /* NanumSquare Regular */
-  margin-top: 10px;
-  line-height: 1.4;
+/* ------------------------------------------------------------- */
+/* .todoAndDoneSection (Mobile First) */
+/* ------------------------------------------------------------- */
+.todoAndDoneSection {
+  /* background-color: beige; */ /* 확인용 배경색 제거 */
+  display: flex;
+  flex-direction: column; /* 모바일/태블릿 기본값: 세로 정렬 */
+  gap: 24px; /* 모바일/태블릿 기본 간격 */
+  width: 100%;
+}
+
+/* 데스크톱 (min-width 부터 시작) */
+@media (min-width: var(--desktop-min-width)) {
+  .todoAndDoneSection {
+    flex-direction: row !important; /* 데스크톱에서 가로 정렬 */
+    gap: 40px;
+  }
+}
+
+/* ------------------------------------------------------------- */
+/* .todoSection, .doneSection (Mobile First) */
+/* ------------------------------------------------------------- */
+.todoSection,
+.doneSection {
+  /* background-color: yellow; */ /* 확인을 위한 임시 배경색 제거 */
+  display: flex;
+  flex-direction: column; /* 섹션 내부 아이템(예: 이미지, 목록)은 기본적으로 세로 정렬 */
+  gap: 24px; /* 모바일/태블릿 섹션 내부 아이템 간의 간격 */
+  /* 데스크톱에서 flex: 1; 을 적용할 것이므로, 여기서는 기본 너비 설정을 하지 않음 */
+}
+
+/* 태블릿 (min-width 부터 시작, 필요시 추가) */
+/* 현재 태블릿과 모바일의 gap이 동일하므로 별도 미디어 쿼리 없음 */
+@media (min-width: var(--tablet-min-width)) {
+  .todoSection,
+  .doneSection {
+    /* flex: 1;  이것은 데스크톱에서만 적용하는게 시안에 맞습니다.*/
+    gap: 24px; /* 태블릿 섹션 내부 아이템 간의 간격 */
+  }
+}
+
+/* 데스크톱 (min-width 부터 시작) */
+@media (min-width: var(--desktop-min-width)) {
+  .todoSection,
+  .doneSection {
+    flex: 1; /* 데스크톱에서 각 섹션이 부모 공간을 동일하게 나눠갖도록 */
+    gap: 24px; /* 데스크톱 섹션 내부 아이템 간의 간격 */
+  }
+}
+
+/* ------------------------------------------------------------- */
+/* .todoList, .doneList (Mobile First) */
+/* ------------------------------------------------------------- */
+.todoList,
+.doneList {
+  width: 100%; /* 부모 섹션의 너비를 꽉 채움 */
+  display: flex; /* Flexbox 사용 */
+  flex-direction: column; /* 아이템들을 세로로 쌓음 */
+  gap: 16px; /* 모바일/데스크톱 아이템 간의 간격 */
+  /* background-color: green; */ /* 확인용 배경색 제거 */
+  align-items: flex-start; /* 아이템들이 왼쪽으로 정렬되도록 명시 */
+}
+
+/* 태블릿 (min-width 부터 시작) */
+@media (min-width: var(--tablet-min-width)) {
+  .todoList,
+  .doneList {
+    gap: 12px; /* 태블릿 목록 아이템 간격 시안에 따라 조정 */
+  }
+}
+
+/* ------------------------------------------------------------- */
+/* Empty State (Mobile First) */
+/* ------------------------------------------------------------- */
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* 시안에 맞춰 왼쪽 정렬 */
+  justify-content: flex-start; /* 상단 정렬 */
+  gap: 16px; /* 이미지와 텍스트 사이 간격 */
+  padding: 24px 0; /* 모바일 시안 상하 패딩 */
+  text-align: left; /* 텍스트도 왼쪽 정렬 */
+  margin-left: 12px; /* 모바일도 왼쪽 여백 유지 */
+}
+
+.emptyImageLarge {
+  display: none; /* 모바일에서는 large 숨김 (Mobile First) */
+}
+
+.emptyImageSmall {
+  display: block; /* 모바일에서는 small 표시 (Mobile First) */
+}
+
+/* 태블릿 (min-width 부터 시작) */
+@media (min-width: var(--tablet-min-width)) {
+  .emptyState {
+    padding: 32px 0;
+    margin-left: 12px; /* 태블릿도 왼쪽 여백 유지 */
+  }
+  .emptyImageLarge {
+    display: block; /* 태블릿에서는 large 표시 */
+  }
+  .emptyImageSmall {
+    display: none; /* 태블릿에서는 small 숨김 */
+  }
+}
+
+/* 데스크톱 (min-width 부터 시작) */
+@media (min-width: var(--desktop-min-width)) {
+  .emptyState {
+    padding: 40px 0; /* 데스크톱 시안 상하 패딩 */
+    margin-left: 12px; /* 데스크톱도 왼쪽 여백 유지 */
+  }
+  /* 데스크톱에서도 Large 이미지 유지, Small 숨김 (태블릿과 동일) */
+  .emptyImageLarge {
+    display: block;
+  }
+  .emptyImageSmall {
+    display: none;
+  }
+}
+
+/* ------------------------------------------------------------- */
+/* 기타 스타일 (Mobile First 고려) */
+/* ------------------------------------------------------------- */
+.loadingText,
+.errorText {
+  text-align: center;
+  font-family: var(--font-nanum-square-regular), sans-serif;
+  font-size: 18px;
+  color: var(--slate-600);
+  padding: 40px 0; /* 모든 화면에서 동일하게 유지 */
+}
+
+.errorText {
+  color: var(--rose-500);
+  font-weight: 700;
 }

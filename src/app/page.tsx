@@ -1,193 +1,295 @@
 // src/app/page.tsx
-
 "use client";
 
-import React, { useEffect, useState } from "react";
-import Search from "../components/common/Search";
-import CheckListItem from "../components/todo/CheckListItem";
-import CheckListDetail from "../components/todo/CheckListDetail";
+import React, { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
-import styles from "./page.module.css"; // page.module.css 임포트 (새로 생성)
+import { useRouter } from "next/navigation"; // useRouter 임포트 추가
+import styles from "./page.module.css";
+import Search from "@/components/common/Search";
+import Button from "@/components/todo/Button";
+import CheckListItem from "@/components/todo/CheckListItem";
+// import CheckListDetail from "@/components/todo/CheckListDetail"; // 상세 페이지로 직접 이동하므로 이 임포트 제거
 
+// API 명세 및 lib/data.ts의 Item 타입에 맞게 TodoItem 타입 정의
 interface TodoItem {
-  id: string;
-  title: string;
-  status: "TODO" | "DONE";
-  memo: string | null;
+  id: number; // API 명세에 따라 number
+  name: string; // title 대신 name
+  isCompleted: boolean; // status 대신 isCompleted (boolean)
+  memo: string | null; // memo는 string 또는 null (optional 아님)
+  imageUrl: string | null; // imageUrl은 string 또는 null (optional 아님)
 }
 
-const HomePage: React.FC = () => {
-  const [todos, setTodos] = useState<TodoItem[]>([]);
-  const [filter, setFilter] = useState<"ALL" | "TODO" | "DONE">("ALL");
-  const [selectedTodo, setSelectedTodo] = useState<TodoItem | null>(null);
+// API 기본 URL과 고정된 tenantId
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3000"; // 로컬 개발 시 기본값 설정
+const TENANT_ID = "defaultTenant"; // 여기에 실제 tenantId를 사용하거나 동적으로 가져와야 함
 
-  useEffect(() => {
-    const dummyTodos: TodoItem[] = [
-      {
-        id: "1",
-        title: "비타민 챙겨 먹기",
-        status: "TODO",
-        memo: "하루 한 번, 식후 30분",
-      },
-      {
-        id: "2",
-        title: "프로젝트 계획서 작성",
-        status: "DONE",
-        memo: "기획안 초안 완성, 회의 준비",
-      },
-      { id: "3", title: "장보기", status: "TODO", memo: "우유, 계란, 사과" },
-    ];
-    setTodos(dummyTodos);
+const HomePage: React.FC = () => {
+  const router = useRouter(); // useRouter 훅 초기화
+  const [todoItems, setTodoItems] = useState<TodoItem[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [taskNameInput, setTaskNameInput] = useState<string>(""); // title 대신 name 입력
+  // const [selectedTodo, setSelectedTodo] = useState<TodoItem | null>(null); // 상세 페이지로 이동하므로 제거
+  // const [isDetailModalOpen, setIsDetailModalOpen] = useState<boolean>(false); // 상세 페이지로 이동하므로 제거
+
+  // 할 일 목록 조회
+  const fetchTodos = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      // API 경로 변경: /api/todos -> /api/[tenantId]/items
+      const response = await fetch(`${API_BASE_URL}/api/${TENANT_ID}/items`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      // API 응답 데이터 구조에 맞춰 파싱
+      const result: {
+        success: boolean;
+        data: { items: TodoItem[]; page: any };
+      } = await response.json();
+      if (!result.success) {
+        throw new Error(result.message || "Failed to fetch items from API");
+      }
+      // id는 number 타입이므로 정렬 방식 변경
+      result.data.items.sort((a, b) => a.id - b.id);
+      setTodoItems(result.data.items);
+    } catch (err) {
+      console.error("Failed to fetch todos:", err);
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("An unknown error occurred.");
+      }
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
-  const handleAddTask = (title: string) => {
-    const newTask: TodoItem = {
-      id: Date.now().toString(),
-      title,
-      status: "TODO",
-      memo: null,
-    };
-    setTodos((prevTodos) => [...prevTodos, newTask]);
-  };
+  useEffect(() => {
+    fetchTodos();
+  }, [fetchTodos]);
 
-  const handleToggleTodo = (id: string) => {
-    setTodos((prevTodos) =>
-      prevTodos.map((todo) =>
-        todo.id === id
-          ? { ...todo, status: todo.status === "DONE" ? "TODO" : "DONE" }
-          : todo
-      )
-    );
-  };
+  // 할 일 추가 버튼 클릭 핸들러
+  const handleAddTaskClick = async () => {
+    if (!taskNameInput.trim()) return;
 
-  const handleOpenDetail = (item: TodoItem) => {
-    setSelectedTodo(item);
-  };
+    try {
+      // API 경로 및 body 변경: title -> name, status 제거 (API에서 기본값 처리)
+      const response = await fetch(`${API_BASE_URL}/api/${TENANT_ID}/items`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name: taskNameInput }), // CreateItemDto는 name만 가짐
+      });
 
-  const handleSaveDetail = (
-    id: string,
-    newTitle: string,
-    newMemo: string | null
-  ) => {
-    setTodos((prevTodos) =>
-      prevTodos.map((todo) =>
-        todo.id === id ? { ...todo, title: newTitle, memo: newMemo } : todo
-      )
-    );
-    setSelectedTodo(null);
-  };
+      if (!response.ok) {
+        const errorData = await response.json(); // 에러 응답도 파싱
+        throw new Error(
+          `HTTP error! status: ${response.status} - ${
+            errorData.message || "Unknown error"
+          }`
+        );
+      }
 
-  const handleDeleteDetail = (id: string) => {
-    if (confirm("이 할 일을 삭제하시겠습니까?")) {
-      setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
-      setSelectedTodo(null);
+      await response.json(); // 새로 생성된 아이템 데이터를 받을 수도 있음 (여기서는 일단 무시)
+      await fetchTodos();
+      setTaskNameInput(""); // 입력 필드 초기화
+    } catch (err) {
+      console.error("Failed to add task:", err);
+      if (err instanceof Error) {
+        alert(`할 일 추가 실패: ${err.message}`);
+      } else {
+        alert("할 일 추가 실패: 알 수 없는 오류");
+      }
     }
   };
 
-  const handleCloseDetail = () => {
-    setSelectedTodo(null);
+  // 할 일 상태 토글 (PUT 사용)
+  const handleToggleTodoStatus = async (id: number) => {
+    // id 타입을 string -> number로 변경
+    const itemToUpdate = todoItems.find((item) => item.id === id);
+    if (!itemToUpdate) return;
+
+    const newIsCompleted = !itemToUpdate.isCompleted;
+
+    try {
+      // API 경로 변경: /api/todos/${id} -> /api/[tenantId]/items/[itemId]
+      // PATCH 대신 PUT 사용, 모든 필드를 보내야 함
+      const response = await fetch(
+        `${API_BASE_URL}/api/${TENANT_ID}/items/${id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          // PUT 요청 시 모든 필드를 보내야 함 (명세에 따라)
+          body: JSON.stringify({
+            name: itemToUpdate.name,
+            memo: itemToUpdate.memo,
+            imageUrl: itemToUpdate.imageUrl,
+            isCompleted: newIsCompleted, // 상태만 변경
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(
+          `HTTP error! status: ${response.status} - ${
+            errorData.message || "Unknown error"
+          }`
+        );
+      }
+
+      await response.json();
+      await fetchTodos();
+    } catch (err) {
+      console.error("Failed to toggle todo status:", err);
+      if (err instanceof Error) {
+        alert(`상태 변경 실패: ${err.message}`);
+      } else {
+        alert("상태 변경 실패: 알 수 없는 오류");
+      }
+    }
   };
 
-  const hasTodos = todos.length > 0;
-  const filteredTodos = todos.filter((item) => {
-    if (filter === "ALL") return true;
-    return item.status === filter;
-  });
+  // 할 일 항목 클릭 시 상세 페이지로 이동
+  const handleItemClick = (item: TodoItem) => {
+    // setSelectedTodo(item); // 제거
+    // setIsDetailModalOpen(true); // 제거
+    router.push(`/${item.id}`); // /${itemId} 경로로 이동
+  };
+
+  // isCompleted 필드를 사용하여 필터링
+  const todoList = todoItems.filter((item) => !item.isCompleted);
+  const doneList = todoItems.filter((item) => item.isCompleted);
+
+  const isEmptyTodoList = todoItems.length === 0; // 전체 todoItems 배열이 비어있는지 확인
 
   return (
-    <>
-      <main className={styles.mainContainer}>
-        {" "}
-        {/* 인라인 스타일 대신 클래스 적용 */}
-        <Search onAddTask={handleAddTask} hasTodos={hasTodos} />
-        <hr className={styles.divider} /> {/* 인라인 스타일 대신 클래스 적용 */}
-        <div className={styles.filterButtonContainer}>
-          {" "}
-          {/* 필터링 버튼 컨테이너 */}
-          <button
-            onClick={() => setFilter("ALL")}
-            className={`${styles.filterButton} ${
-              filter === "ALL" ? styles.filterActive : ""
-            }`}
-          >
-            ALL
-          </button>
-          <button
-            onClick={() => setFilter("TODO")}
-            className={`${styles.filterButton} ${
-              filter === "TODO" ? styles.filterActive : ""
-            }`}
-          >
-            TO DO
-          </button>
-          <button
-            onClick={() => setFilter("DONE")}
-            className={`${styles.filterButton} ${
-              filter === "DONE" ? styles.filterActive : ""
-            }`}
-          >
-            DONE
-          </button>
-        </div>
-        <div className={styles.checkListContainer}>
-          {" "}
-          {/* 할 일 목록 컨테이너 */}
-          {filteredTodos.length > 0 ? (
-            filteredTodos.map((item) => (
-              <CheckListItem
-                key={item.id}
-                item={item}
-                onToggle={handleToggleTodo}
-                onClick={() => handleOpenDetail(item)}
-              />
-            ))
-          ) : (
-            <div className={styles.emptyStateContainer}>
-              {" "}
-              {/* 빈 상태 컨테이너 */}
-              <div className={styles.emptyStateColumn}>
-                <Image
-                  src="/img/empty-todo-large.svg"
-                  alt="할 일 없음"
-                  width={100}
-                  height={100}
-                />
-                <p className={styles.emptyStateText}>할 일이 없어요.</p>
-                <p className={styles.emptyStateText}>
-                  TODO를 새롭게 추가해주세요!
-                </p>
-              </div>
-              <div className={styles.emptyStateColumn}>
-                <Image
-                  src="/img/empty-done-large.svg"
-                  alt="완료된 할 일 없음"
-                  width={100}
-                  height={100}
-                />
-                <p className={styles.emptyStateText}>
-                  아직 다 한 할 일이 없어요!
-                </p>
-                <p className={styles.emptyStateText}>
-                  해야 할 일을 확인해보세요!
-                </p>
-              </div>
-            </div>
-          )}
-        </div>
-      </main>
+    <div className={styles.container}>
+      <main className={styles.mainContent}>
+        {/* Search 컴포넌트와 Button 컴포넌트 분리 배치 */}
+        <div className={styles.searchAndButtonContainer}>
+          <Search
+            value={taskNameInput} // taskTitleInput -> taskNameInput
+            onChange={(e) => setTaskNameInput(e.target.value)} // taskTitleInput -> taskNameInput
+          />
 
-      {selectedTodo && (
-        <CheckListDetail
-          id={selectedTodo.id}
-          initialTitle={selectedTodo.title}
-          initialStatus={selectedTodo.status}
-          initialMemo={selectedTodo.memo}
-          onSave={handleSaveDetail}
-          onDelete={handleDeleteDetail}
-          onClose={handleCloseDetail}
-        />
-      )}
-    </>
+          {/* Button 컴포넌트 사용자의 variant에 맞게 수정 */}
+          <Button
+            type="button"
+            variant={isEmptyTodoList ? "addInitial" : "add"}
+            icon="plus"
+            iconPosition="left"
+            onClick={handleAddTaskClick}
+          >
+            추가하기
+          </Button>
+        </div>
+
+        {loading && <p className={styles.loadingText}>Loading tasks...</p>}
+        {error && (
+          <p className={styles.errorText}>
+            Error: {error}
+            <br />
+            API 서버가 실행 중인지 확인해주세요.
+          </p>
+        )}
+
+        {!loading && !error && (
+          <div className={styles.todoAndDoneSection}>
+            <section className={styles.todoSection}>
+              <Image
+                src="/img/todo.svg"
+                alt="할 일"
+                width={101}
+                height={36}
+                className={styles.sectionIcon}
+              />
+
+              {todoList.length === 0 ? (
+                <div className={styles.emptyState}>
+                  <Image
+                    src="/img/empty-todo-large.svg"
+                    alt="할 일 없음"
+                    width={180}
+                    height={180}
+                    className={styles.emptyImageLarge}
+                  />
+                  <Image
+                    src="/img/empty-todo-small.svg"
+                    alt="할 일 없음"
+                    width={120}
+                    height={120}
+                    className={styles.emptyImageSmall}
+                  />
+                  <p className={styles.emptyText}>
+                    할 일이 없어요. TODO를 새로 추가해주세요!
+                  </p>
+                </div>
+              ) : (
+                <div className={styles.todoList}>
+                  {todoList.map((item) => (
+                    <CheckListItem
+                      key={item.id}
+                      item={item} // TodoItem 타입 변경에 따라 CheckListItem의 item prop도 조정 필요
+                      onToggle={handleToggleTodoStatus}
+                      onClick={handleItemClick} // 여기에 handleItemClick 연결
+                    />
+                  ))}
+                </div>
+              )}
+            </section>
+
+            <section className={styles.doneSection}>
+              <Image
+                src="/img/done.svg"
+                alt="완료"
+                width={101}
+                height={36}
+                className={styles.sectionIcon}
+              />
+
+              {doneList.length === 0 ? (
+                <div className={styles.emptyState}>
+                  <Image
+                    src="/img/empty-done-large.svg"
+                    alt="완료된 할 일 없음"
+                    width={180}
+                    height={180}
+                    className={styles.emptyImageLarge}
+                  />
+                  <Image
+                    src="/img/empty-done-small.svg"
+                    alt="완료된 할 일 없음"
+                    width={120}
+                    height={120}
+                    className={styles.emptyImageSmall}
+                  />
+                  <p className={styles.emptyText}>
+                    아직 다 한 할 일이 없어요. 해야 할 일을 체크해보세요!
+                  </p>
+                </div>
+              ) : (
+                <div className={styles.doneList}>
+                  {doneList.map((item) => (
+                    <CheckListItem
+                      key={item.id}
+                      item={item} // TodoItem 타입 변경에 따라 CheckListItem의 item prop도 조정 필요
+                      onToggle={handleToggleTodoStatus}
+                      onClick={handleItemClick} // 여기에 handleItemClick 연결
+                    />
+                  ))}
+                </div>
+              )}
+            </section>
+          </div>
+        )}
+      </main>
+    </div>
   );
 };
 

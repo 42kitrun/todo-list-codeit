@@ -1,72 +1,69 @@
 /* src/app/globals.css */
 
-/* Next.js 폰트 설정 (layout.tsx에서 정의된 변수 사용) */
-/* font-family: var(--font-nanum-square), sans-serif; */
-
-/* CSS Variables for colors - 시안  컬러 팔레트만 사용 */
 :root {
-  /* Slate Colors  */
-  --slate-900: #0f172a;
-  --slate-800: #1e293b;
-  --slate-500: #64748b;
-  --slate-400: #94a3b8;
-  --slate-300: #cbd5e1;
-  --slate-200: #e2e8f0;
-  --slate-100: #f1f5f9;
-
-  /* Violet Colors  */
-  --violet-600: #7c3aed;
-  --violet-100: #ede9fe;
-
-  /* Rose Color  */
-  --rose-500: #f43f5e;
-
-  /* Lime Color  */
-  --lime-300: #bef264;
-
-  /* Amber Color  */
+  /* Color Palette (Figma 시안 기반 최종 확정) */
+  --violet-600: #7f5af0; /* Button Primary, DONE 체크박스 테두리/내부 */
+  --lime-300: #bdff32; /* Active Filter Background, Checkbox Done 내부 */
+  --rose-500: #ef4444; /* Delete Button Background */
   --amber-800: #92400e;
 
-  /* 기존에 사용되던 변수들을 시안 컬러 팔레트에 매핑 */
+  --slate-900: #0f172a; /* Primary Text, Button Text (검정색에 가까움) */
+  --slate-800: #1e293b; /* CheckListDetail 배경색 (수정) */
+  --slate-700: #334155;
+  --slate-600: #475569;
+  --slate-500: #64748b; /* Secondary Text, Empty State Text */
+  --slate-400: #94a3b8; /* Placeholder Text, Border for Input/TODO checkbox */
+  --slate-300: #cbd5e1; /* Input Border, Checkbox TODO border, Dashed border */
+  --slate-200: #e2e8f0; /* Divider, Filter Button Inactive BG, Button Secondary Hover */
+  --slate-100: #f1f5f9; /* 전체 배경색 (Figma 시안 배경색) */
+
+  --white: #ffffff; /* GNB, Search, CheckListItem 배경색 */
+  --gray-50: #f9fafb; /* 전체 배경*/
+
+  /* 추가된 시안 색상 */
+  --violet-100: #f0ebff; /* 완료된 할 일 항목 배경색 */
+
+  /* Semantic Colors */
   --background: var(
-    --slate-800
-  ); /* 시안에서 가장 어두운 배경으로 활용할 slate/800 */
-  --white: #ffffff; /* 시안에 직접적인 white는 없지만, UI에 필요한 경우 명시적 추가 */
+    --gray-50
+  ); /* 전체 배경색 변수명 통일 (background-color -> background) */
+  --text-primary: var(--slate-900); /* 기본 텍스트 색상 (검정색에 가까움) */
+  --text-secondary: var(--slate-500); /* 보조 텍스트 색상 (회색) */
+  --text-placeholder: var(--slate-400);
 
-  /* 이전 purple-initial 등과 매핑 (시안 컬러 중 가장 적합한 것으로 매핑) */
-  --button-primary: var(--violet-600); /* 시안의 violet/600 */
-  --button-primary-active: #6d2ed2; /* violet/600보다 살짝 어둡게 (가이드라인에 따라 계산) */
-  --button-secondary: var(--slate-100); /* 시안의 slate/100 */
-  --button-secondary-active: var(--slate-200); /* 시안의 slate/200 */
+  --button-primary: var(--violet-600);
+  --button-primary-active: #6c4ed1; /* violet-600보다 살짝 어둡게 */
+  --button-secondary: var(--white); /* Button variant secondary는 흰색 배경 */
+  --button-secondary-active: var(--slate-200); /* 호버 시 slate-200 */
+  --delete-button-bg: var(--rose-500);
+  --delete-button-active: #d13a3a;
 
-  --active-filter-bg: var(--lime-300); /* 시안의 lime/300, 'ALL' 버튼 배경 */
-  --active-filter-text: var(--slate-900); /* 시안의 slate/900 */
+  --active-filter-bg: var(--lime-300);
+  --active-filter-text: var(--slate-900);
 
-  --delete-button-bg: var(--rose-500); /* 시안의 rose/500 */
-  --delete-button-active: #ce314e; /* rose/500보다 살짝 어둡게 */
+  /* Shadows */
+  --shadow-default: 0px 4px 10px rgba(0, 0, 0, 0.1);
 
-  --text-primary: var(--slate-900); /* 시안의 slate/900 */
-  --text-secondary: var(--slate-500); /* 시안의 slate/500 */
-  --text-placeholder: var(--slate-400); /* 시안의 slate/400 */
-
-  --slate-900-alpha-50: rgba(15, 23, 42, 0.5); /* slate/900의 50% 투명도 */
-  --slate-900-alpha-60: rgba(
-    15,
-    23,
-    42,
-    0.6
-  ); /* detailImageEdit 호버 시 사용 */
+  /*데스크톱, 태블릿, 모바일 크기*/
+  --mobile-max-width: 767px; /* 일반적으로 모바일은 767px 이하 */
+  --tablet-min-width: 768px; /* 태블릿은 768px부터 시작 */
+  --tablet-max-width: 1023px; /* 태블릿 최대 1023px (데스크톱 전) */
+  --desktop-min-width: 1024px; /* 데스크톱은 1024px부터 시작  */
 }
 
+html,
 body {
-  margin: 0;
   padding: 0;
-  box-sizing: border-box;
-  font-family: var(--font-nanum-square), sans-serif;
+  margin: 0;
+  /* Next.js localFont의 CSS 변수를 사용하여 폰트 적용 (정확한 변수명 사용) */
+  font-family: var(--font-nanum-square-regular), var(--font-nanum-square-bold),
+    sans-serif;
+  background-color: var(--background);
+  color: var(--text-primary); /* 모든 텍스트의 기본 색상 */
   line-height: 1.5;
-  font-weight: 400; /* 기본 폰트 웨이트 (Regular) */
-  color: var(--text-primary); /* 시안의 slate/900 */
-  background-color: var(--background); /* 시안의 slate/800 */
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 a {
@@ -74,25 +71,27 @@ a {
   text-decoration: none;
 }
 
-button {
-  cursor: pointer;
-  border: none;
-  background: none;
+* {
+  box-sizing: border-box;
+  margin: 0;
   padding: 0;
 }
 
-input,
-textarea {
-  font-family: inherit;
-  font-size: inherit;
-  color: inherit;
-  outline: none;
+/* 스크롤바 커스터마이징 (선택 사항) */
+::-webkit-scrollbar {
+  width: 8px;
 }
 
-h1,
-h2,
-h3,
-strong,
-.bold-text {
-  font-weight: 700; /* Bold 웨이트 적용 */
+::-webkit-scrollbar-thumb {
+  background-color: var(--slate-400);
+  border-radius: 4px;
 }
+
+::-webkit-scrollbar-track {
+  background-color: var(--slate-200);
+}
+
+/* Gnb가 fixed 될 경우를 대비한 body 패딩 */
+/* Gnb 컴포넌트 높이에 따라 조절이 필요할 수 있습니다.
+   현재 시안에서는 Gnb가 스크롤 시 고정되지 않는 것으로 보이므로 별도 패딩은 추가하지 않습니다.
+   만약 Gnb가 fixed 된다면, body에 Gnb 높이만큼의 padding-top을 주어야 합니다. */

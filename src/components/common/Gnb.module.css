@@ -1,20 +1,71 @@
 /* src/components/common/Gnb.module.css */
 
 .gnbContainer {
-  background-color: var(--slate-900); /* 시안의 slate/900 */
-  padding: 16px 20px; /* 시안에 맞춰 여백 조정 */
+  width: 100%; /* GNB는 항상 100% 너비 */
   display: flex;
+  flex-direction: row;
+  justify-content: center;
   align-items: center;
-  justify-content: flex-start; /* 로고가 왼쪽에 위치하도록 */
-  width: 100%;
-  box-sizing: border-box; /* 패딩이 너비에 포함되도록 */
-  position: sticky; /* 상단에 고정 */
+  position: sticky; /* 스크롤 시 상단 고정 */
   top: 0;
-  z-index: 1000; /* 다른 요소 위에 오도록 */
+  left: 0;
+  z-index: 1000;
+  border-bottom: 1px solid var(--slate-200);
+  /* GNB의 배경색을 여기서 명시적으로 설정합니다. */
+  background-color: var(--white); /*시안이 흰색이라면*/
+  /* 필요하다면 그림자 효과도 추가할 수 있습니다: */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-.logoLink {
-  /* Link 자체에 특별한 스타일은 불필요할 수 있지만, 이미지 크기 제어를 위해 필요하다면 추가 */
-  /* 로고 이미지의 너비와 높이를 Image 컴포넌트의 width, height prop으로 설정하거나, */
-  /* 필요하다면 여기에 max-width, max-height를 지정하여 Image 컴포넌트가 부모 크기에 맞춰지도록 할 수 있습니다. */
+.logoContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+
+  width: 1200px;
+
+  border: none;
+  padding: 0px 0px 0px 20px;
+  cursor: pointer;
+}
+
+.logoContainer button {
+  /* logoContainer 내부의 button 태그에 직접 스타일 적용 */
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex; /* Image 정렬을 위해 */
+  align-items: center;
+  justify-content: center;
+}
+
+/* 반응형 스타일 */
+
+/* GNB는 전체 화면 너비를 차지하고, 내부 콘텐츠는 appContainer의 중앙 정렬 시스템을 따르도록 합니다. */
+/* 따라서 GNB 자체의 padding은 최소화하고, 내부 요소에만 영향을 미치도록 합니다. */
+
+/* 모바일 버전 */
+@media (max-width: var(--mobile-max-width)) {
+  .gnbContainer {
+    height: 60px;
+    border-bottom: none;
+  }
+}
+
+/* 태블릿 버전 */
+@media (min-width: var(--tablet-min-width)) and (max-width: var(--tablet-max-width)) {
+  .gnbContainer {
+    height: 60px;
+    border-bottom: 1px solid var(--slate-200);
+  }
+}
+
+/* 데스크톱 버전 */
+@media (min-width: var(--tablet-max-width)) {
+  .gnbContainer {
+    height: 60px;
+    border-bottom: 1px solid var(--slate-200);
+  }
 }
