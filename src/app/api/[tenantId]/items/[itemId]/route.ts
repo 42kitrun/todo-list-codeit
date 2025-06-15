@@ -1,16 +1,12 @@
 // src/app/api/[tenantId]/items/[itemId]/route.ts
 import { NextRequest, NextResponse } from "next/server";
-import {
-  getItemById,
-  updateItem,
-  deleteItem,
-  Item, // Item 인터페이스도 필요하니 임포트합니다.
-} from "@/lib/data"; // lib/data.ts에서 필요한 함수들을 가져옵니다.
+import { getItemById, updateItem, deleteItem, Item } from "@/lib/data";
 
 // GET /api/[tenantId]/items/[itemId] - 특정 아이템 조회
 export async function GET(
   request: NextRequest,
-  { params }: { params: { tenantId: string; itemId: string } }
+  // { params }: { params: { tenantId: string; itemId: string } } <-- 기존
+  { params }: { params: Record<string, string> } // <-- 여기를 이렇게 변경합니다.
 ) {
   const { tenantId, itemId } = params;
   const parsedItemId = parseInt(itemId, 10);
@@ -37,7 +33,8 @@ export async function GET(
 // PUT /api/[tenantId]/items/[itemId] - 특정 아이템 업데이트 (전체 교체)
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { tenantId: string; itemId: string } }
+  // { params }: { params: { tenantId: string; itemId: string } } <-- 기존
+  { params }: { params: Record<string, string> } // <-- 여기를 이렇게 변경합니다.
 ) {
   const { tenantId, itemId } = params;
   const parsedItemId = parseInt(itemId, 10);
@@ -52,8 +49,6 @@ export async function PUT(
   try {
     const body = await request.json();
 
-    // PUT 요청의 body는 모든 필드를 포함해야 합니다 (명세에 따라)
-    // partial이 아니라 전체 Item 구조를 요구
     const updateData: Omit<Item, "id" | "tenantId"> = {
       name: body.name,
       memo: body.memo !== undefined ? body.memo : null,
@@ -61,7 +56,6 @@ export async function PUT(
       isCompleted: body.isCompleted,
     };
 
-    // 필수 필드 검증 (name, isCompleted)
     if (typeof updateData.name !== "string" || updateData.name.trim() === "") {
       return NextResponse.json(
         {
@@ -103,7 +97,8 @@ export async function PUT(
 // DELETE /api/[tenantId]/items/[itemId] - 특정 아이템 삭제
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { tenantId: string; itemId: string } }
+  // { params }: { params: { tenantId: string; itemId: string } } <-- 기존
+  { params }: { params: Record<string, string> } // <-- 여기를 이렇게 변경합니다.
 ) {
   const { tenantId, itemId } = params;
   const parsedItemId = parseInt(itemId, 10);
@@ -129,8 +124,3 @@ export async function DELETE(
     message: "Item deleted successfully",
   });
 }
-
-// OPTIONS (CORS Preflight 요청 처리, 필요시 추가)
-// export async function OPTIONS(request: NextRequest) {
-//     return NextResponse.json({}, { status: 200 });
-// }

@@ -29,27 +29,32 @@ const HomePage: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [taskNameInput, setTaskNameInput] = useState<string>(""); // title 대신 name 입력
-  // const [selectedTodo, setSelectedTodo] = useState<TodoItem | null>(null); // 상세 페이지로 이동하므로 제거
-  // const [isDetailModalOpen, setIsDetailModalOpen] = useState<boolean>(false); // 상세 페이지로 이동하므로 제거
 
   // 할 일 목록 조회
   const fetchTodos = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
-      // API 경로 변경: /api/todos -> /api/[tenantId]/items
       const response = await fetch(`${API_BASE_URL}/api/${TENANT_ID}/items`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       // API 응답 데이터 구조에 맞춰 파싱
+      // **이 부분 수정:** message 속성 추가
       const result: {
         success: boolean;
-        data: { items: TodoItem[]; page: unknown };
+        data?: { items: TodoItem[]; page: unknown }; // data는 success가 false일 때 없을 수도 있으니 optional로
+        message?: string; // message 속성 추가
       } = await response.json();
+
       if (!result.success) {
         throw new Error(result.message || "Failed to fetch items from API");
       }
+      // data가 없을 경우를 대비하여 방어 코드 추가
+      if (!result.data || !result.data.items) {
+        throw new Error("API response data is malformed: missing items array.");
+      }
+
       // id는 number 타입이므로 정렬 방식 변경
       result.data.items.sort((a, b) => a.id - b.id);
       setTodoItems(result.data.items);
@@ -74,7 +79,6 @@ const HomePage: React.FC = () => {
     if (!taskNameInput.trim()) return;
 
     try {
-      // API 경로 및 body 변경: title -> name, status 제거 (API에서 기본값 처리)
       const response = await fetch(`${API_BASE_URL}/api/${TENANT_ID}/items`, {
         method: "POST",
         headers: {
@@ -114,8 +118,6 @@ const HomePage: React.FC = () => {
     const newIsCompleted = !itemToUpdate.isCompleted;
 
     try {
-      // API 경로 변경: /api/todos/${id} -> /api/[tenantId]/items/[itemId]
-      // PATCH 대신 PUT 사용, 모든 필드를 보내야 함
       const response = await fetch(
         `${API_BASE_URL}/api/${TENANT_ID}/items/${id}`,
         {
@@ -156,8 +158,6 @@ const HomePage: React.FC = () => {
 
   // 할 일 항목 클릭 시 상세 페이지로 이동
   const handleItemClick = (item: TodoItem) => {
-    // setSelectedTodo(item); // 제거
-    // setIsDetailModalOpen(true); // 제거
     router.push(`/${item.id}`); // /${itemId} 경로로 이동
   };
 

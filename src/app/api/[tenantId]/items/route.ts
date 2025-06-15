@@ -8,10 +8,10 @@ interface CreateItemDto {
 }
 
 // GET: 아이템 목록 조회
-// { params } 인자를 async 함수에서 안전하게 구조 분해 할당합니다.
 export async function GET(
   request: NextRequest,
-  { params }: { params: { tenantId: string } } // 이 부분은 그대로 둡니다.
+  // { params }: { params: { tenantId: string } }  <-- 기존
+  { params }: { params: Record<string, string> } // <-- 여기를 이렇게 변경합니다.
 ): Promise<
   NextResponse<{
     success: boolean;
@@ -21,7 +21,7 @@ export async function GET(
     message?: string | undefined;
   }>
 > {
-  // params를 여기서 바로 사용합니다.
+  // params의 속성에 접근하는 방식은 이전과 동일합니다.
   const { tenantId } = params;
 
   const searchParams = request.nextUrl.searchParams;
@@ -65,7 +65,8 @@ export async function GET(
 // POST 함수도 동일하게 적용
 export async function POST(
   request: NextRequest,
-  { params }: { params: { tenantId: string } }
+  // { params }: { params: { tenantId: string } }  <-- 기존
+  { params }: { params: Record<string, string> } // <-- 여기를 이렇게 변경합니다.
 ): Promise<
   NextResponse<{
     success: boolean;
@@ -73,7 +74,7 @@ export async function POST(
     message?: string | undefined;
   }>
 > {
-  const { tenantId } = params; // 동일하게 바로 사용
+  const { tenantId } = params;
 
   console.log(`POST /api/${tenantId}/items`);
 
