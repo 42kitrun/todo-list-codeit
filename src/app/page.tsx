@@ -19,8 +19,6 @@ interface TodoItem {
 }
 
 // API 기본 URL과 고정된 tenantId
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3000"; // 로컬 개발 시 기본값 설정
 const TENANT_ID = "defaultTenant"; // 여기에 실제 tenantId를 사용하거나 동적으로 가져와야 함
 
 const HomePage: React.FC = () => {
@@ -35,7 +33,7 @@ const HomePage: React.FC = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(`${API_BASE_URL}/api/${TENANT_ID}/items`);
+      const response = await fetch(`/api/${TENANT_ID}/items`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -79,7 +77,7 @@ const HomePage: React.FC = () => {
     if (!taskNameInput.trim()) return;
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/${TENANT_ID}/items`, {
+      const response = await fetch(`/api/${TENANT_ID}/items`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -118,22 +116,19 @@ const HomePage: React.FC = () => {
     const newIsCompleted = !itemToUpdate.isCompleted;
 
     try {
-      const response = await fetch(
-        `${API_BASE_URL}/api/${TENANT_ID}/items/${id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          // PUT 요청 시 모든 필드를 보내야 함 (명세에 따라)
-          body: JSON.stringify({
-            name: itemToUpdate.name,
-            memo: itemToUpdate.memo,
-            imageUrl: itemToUpdate.imageUrl,
-            isCompleted: newIsCompleted, // 상태만 변경
-          }),
-        }
-      );
+      const response = await fetch(`/api/${TENANT_ID}/items/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        // PUT 요청 시 모든 필드를 보내야 함 (명세에 따라)
+        body: JSON.stringify({
+          name: itemToUpdate.name,
+          memo: itemToUpdate.memo,
+          imageUrl: itemToUpdate.imageUrl,
+          isCompleted: newIsCompleted, // 상태만 변경
+        }),
+      });
 
       if (!response.ok) {
         const errorData = await response.json();

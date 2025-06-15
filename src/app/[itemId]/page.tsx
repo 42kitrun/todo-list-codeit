@@ -113,16 +113,13 @@ export default function ItemDetailPage() {
     };
 
     try {
-      const response = await fetch(
-        `${API_BASE_URL}/api/${TENANT_ID}/items/${id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(updatedItem),
-        }
-      );
+      const response = await fetch(`/api/${TENANT_ID}/items/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedItem),
+      });
 
       if (!response.ok) {
         const errorData = await response.json();
