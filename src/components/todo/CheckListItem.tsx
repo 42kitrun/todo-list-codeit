@@ -6,19 +6,18 @@ import React from "react";
 import Image from "next/image";
 import styles from "./CheckListItem.module.css";
 
-// API 명세 및 lib/data.ts의 Item 타입에 맞게 TodoItem 타입 정의
 interface TodoItem {
-  id: number; // string -> number
-  name: string; // title -> name
-  isCompleted: boolean; // status: "TODO" | "DONE" -> isCompleted: boolean
+  id: number;
+  name: string;
+  isCompleted: boolean;
   memo: string | null;
   imageUrl: string | null;
 }
 
 interface CheckListItemProps {
   item: TodoItem;
-  onToggle: (id: number) => void; // id 타입 string -> number
-  onClick: (item: TodoItem) => void;
+  onToggle: (id: number) => void;
+  onClick: (item: TodoItem) => void; // 상세 페이지 이동을 위한 prop
 }
 
 const CheckListItem: React.FC<CheckListItemProps> = ({
@@ -26,21 +25,27 @@ const CheckListItem: React.FC<CheckListItemProps> = ({
   onToggle,
   onClick,
 }) => {
-  const isDone = item.isCompleted; // item.status === "DONE" -> item.isCompleted
+  const isDone = item.isCompleted;
 
-  const handleToggle = (e: React.MouseEvent) => {
-    e.stopPropagation();
+  const handleToggleClick = (e: React.MouseEvent) => {
+    e.stopPropagation(); // ⭐ 이 부분이 중요: 체크박스를 클릭했을 때만 이벤트 전파를 막습니다. ⭐
     onToggle(item.id);
+  };
+
+  const handleItemNameClick = () => {
+    // ⭐ 새로 추가된 함수: 이름 클릭 시 상세 페이지로 이동 ⭐
+    onClick(item);
   };
 
   return (
     <div
       className={`${styles.checklistItem} ${isDone ? styles.done : ""}`}
-      onClick={() => onClick(item)}
+      // 이제 div 전체에 onClick을 달지 않습니다.
+      // 각 요소의 역할에 맞는 onClick을 개별적으로 부여합니다.
     >
       <button
         className={`${styles.checkbox} ${isDone ? styles.checked : ""}`}
-        onClick={handleToggle}
+        onClick={handleToggleClick} // 체크박스 클릭 시 토글 기능만 수행
         aria-label={isDone ? "할 일 완료 취소" : "할 일 완료"}
       >
         <Image
@@ -51,8 +56,10 @@ const CheckListItem: React.FC<CheckListItemProps> = ({
           className={styles.checkboxIcon}
         />
       </button>
-      <span className={styles.title}>{item.name}</span>{" "}
-      {/* item.title -> item.name */}
+      {/* ⭐ 이름을 클릭했을 때만 상세 페이지로 이동하도록 onClick을 여기에 연결합니다. ⭐ */}
+      <span className={styles.title} onClick={handleItemNameClick}>
+        {item.name}
+      </span>{" "}
     </div>
   );
 };
