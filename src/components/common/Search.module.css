@@ -45,7 +45,7 @@
   z-index: 1; /* shadowBackground 위에 오도록 */
   top: 0; /* 초기 위치 */
   left: 0; /* 초기 위치 */
-  padding: 0 20;
+  padding: 0 24px;
 }
 
 .searchContainer input::placeholder {
