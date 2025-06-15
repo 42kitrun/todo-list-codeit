@@ -29,25 +29,33 @@
   color: var(--text-secondary);
 }
 
+.detailContainer {
+  width: 100%;
+  /* height: 100%; // ⭐ 이 'height: 100%'는 상황에 따라 문제가 될 수 있습니다. 만약 부모의 높이가 명확하지 않다면, 자식 요소들이 높이를 결정하도록 'auto'로 두거나 제거하는 것을 고려해 보세요. ⭐ */
+  display: flex;
+  flex-direction: column; /* 기본은 세로 정렬 */
+  align-items: center;
+  gap: 24px;
+}
+
 /* ============================================================= */
-/* 이미지 섹션 스타일 (필수 사항으로 변경) */
+/* 이미지 섹션 스타일 */
 /* ============================================================= */
 .imageInputContainer {
-  position: relative; /* 자식 요소의 absolute 포지셔닝을 위해 */
-  width: 100%;
-  max-width: 996px; /* TodoListItem 및 Memo와 동일한 최대 너비 */
-  height: 311px; /* 고정 높이 */
+  position: relative;
+  width: 100%; /* 모바일: 전체 너비 */
+  max-width: 996px;
+  height: 311px;
   border-radius: 24px;
-  overflow: hidden; /* 이미지나 placeholder가 둥근 모서리 밖으로 나가지 않도록 */
+  overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
   box-sizing: border-box;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-  background-color: var(--slate-100); /* 배경색 지정 */
+  background-color: var(--slate-100);
 }
 
-/* 이미지가 없을 때의 플레이스홀더 박스 */
 .imagePlaceholder {
   width: 100%;
   height: 100%;
@@ -55,48 +63,57 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border: 2px dashed var(--slate-300); /* 점선 테두리 */
+  border: 2px dashed var(--slate-300);
   cursor: pointer;
-  position: relative; /* + 버튼 위치 지정을 위해 */
+  position: relative;
 }
 
 .imageAddButton {
   position: absolute;
-  bottom: 24px; /* 시안과 동일하게 하단 오른쪽 위치 */
-  right: 24px; /* 시안과 동일하게 하단 오른쪽 위치 */
-  z-index: 10; /* 다른 요소 위에 오도록 */
+  bottom: 24px;
+  right: 24px;
+  z-index: 10;
 }
 
-/* 이미지가 업로드되었을 때의 이미지 스타일 */
 .uploadedImage {
   width: 100%;
   height: 100%;
-  object-fit: fill;
-  border-radius: 12px; /* 이미지 자체의 둥근 모서리 */
+  object-fit: cover; /* ⭐ 'fill'에서 'cover'로 변경했습니다. 이미지의 비율을 유지하면서 영역을 채웁니다. ⭐ */
+  border-radius: 12px;
   display: block;
 }
 
-/* 이미지가 있을 때 수정/삭제 버튼 그룹 */
 .imageButtons {
   position: absolute;
   bottom: 24px;
   right: 24px;
   display: flex;
-  gap: 8px; /* 버튼 사이 간격 */
+  gap: 8px;
   z-index: 10;
 }
 
+.moveContainer {
+  /* .detailContainer의 두 번째 직계 자식 */
+  width: 100%; /* 모바일: 전체 너비 */
+  height: 100%; /* 마찬가지로 필요하지 않으면 'auto'로 두거나 제거 고려 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
 /* ============================================================= */
-/* Memo Section 스타일 (이전 Memo.module.css 내용 통합) */
+/* Memo Section 스타일 */
 /* ============================================================= */
 .memoContainer {
+  /* .moveContainer의 자식 */
   position: relative;
-  width: 100%; /* 너비 유동적 */
-  max-width: 996px; /* TodoListItem 및 Memo와 동일한 최대 너비 */
-  height: 311px; /* ⭐ 높이 311px로 고정 ⭐ */
-  border-radius: 24px; /* ⭐ border-radius 24px 적용 ⭐ */
+  width: 100%;
+  max-width: 996px;
+  height: 311px;
+  border-radius: 24px;
   overflow: hidden;
-  margin-top: 24px; /* 모바일/태블릿에서만 적용될 여백 */
+  margin-top: 24px; /* 모바일/태블릿 전용 마진 */
   padding: 0;
 
   background-image: url("/img/memo.svg");
@@ -127,8 +144,8 @@
   position: relative;
   z-index: 1;
   margin: 16px 20px 20px 20px;
-  width: auto; /* 부모 flex 아이템에 맞춰 조정될 수 있도록 auto */
-  flex-grow: 1; /* 남은 공간을 채우도록 함 */
+  width: auto;
+  flex-grow: 1;
   padding: 12px;
   border: none;
   background-color: transparent;
@@ -163,7 +180,7 @@
   }
 
   .memoContainer {
-    margin-top: 32px; /* 태블릿에서 top margin 조정 */
+    margin-top: 32px;
   }
 }
 
@@ -172,28 +189,35 @@
   .mainContent {
     padding: 32px 20px;
     gap: 20px; /* 이미지 컨테이너와 메모 컨테이너 사이 간격 */
-    flex-direction: row; /* ⭐ 가로 정렬 ⭐ */
+    flex-direction: row; /* ⭐ mainContent도 가로 정렬 ⭐ */
     align-items: flex-start; /* 상단 정렬 */
-    justify-content: center; /* 가운데 정렬 (양쪽 여백 균등하게) */
+    justify-content: center; /* 가운데 정렬 */
   }
 
+  .detailContainer {
+    flex-direction: row; /* ⭐ 여기도 flex-direction: row 적용 ⭐ */
+    align-items: flex-start; /* 자식 요소들을 상단에 정렬 */
+    width: 100%; /* mainContent의 전체 너비를 차지하도록 */
+    gap: 20px; /* imageInputContainer와 moveContainer 사이의 간격 */
+  }
+
+  /* ⭐ 가장 중요한 수정: .detailContainer의 직계 자식인 .imageInputContainer와 .moveContainer의 너비를 설정 ⭐ */
   .imageInputContainer,
-  .memoContainer {
-    /* 데스크톱에서 각각의 너비를 지정하여 나란히 배치될 수 있도록 합니다. */
-    /* 예시: 49.5%로 설정하고 gap을 1%로 주어 총 100%를 맞춥니다. */
-    width: calc(
-      50% - 10px
-    ); /* mainContent의 gap이 20px이므로, 절반으로 나눠 10px씩 뺍니다. */
+  .moveContainer {
+    /* <-- .memoContainer 대신 .moveContainer를 선택자로 사용 */
+    width: calc(50% - 10px); /* 50% - (.detailContainer의 gap의 절반) */
     max-width: unset; /* 더 이상 최대 너비 제한이 필요 없음 */
     margin-top: 0; /* 가로 정렬 시 세로 마진 제거 */
   }
 
   .memoContainer {
-    /* memoContainer의 높이를 imageInputContainer와 맞춥니다 */
-    height: 311px; /* 필요시 이 값을 imageInputContainer와 동일하게 유지 */
+    /* .memoContainer는 이제 .moveContainer의 자식입니다. */
+    /* .moveContainer가 Flex 컨테이너이고 column 방향이므로, .memoContainer는 100% 너비를 유지할 수 있습니다. */
+    height: 311px; /* 이미지 컨테이너와 높이를 맞춥니다. */
+    margin-top: 0; /* 데스크톱에서는 이전에 적용된 마진 제거 */
   }
 
-  /* 데스크톱에서 Memo 텍스트 영역의 높이 조정 */
+  /* 데스크톱에서 Memo 텍스트 영역 높이 조정 (필요시) */
   .memoTextarea {
     height: calc(
       100% - 60px - 36px
@@ -203,7 +227,7 @@
 
   .buttonGroup {
     width: 100%; /* 부모 너비를 따라가게 */
-    max-width: 1200px; /* 전체 컨텐츠 최대 너비에 맞춤 */
+    max-width: 1200px; /* 전체 컨텐츠 최대 너비에 맞춤. 만약 .moveContainer가 좁다면 이 값은 .moveContainer의 너비에 맞춰 조정될 수 있습니다. */
     margin-top: 40px; /* 이미지/메모 섹션 아래에 여백 추가 */
     justify-content: flex-end; /* 오른쪽 정렬 */
   }

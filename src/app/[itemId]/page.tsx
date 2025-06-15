@@ -1,6 +1,5 @@
 // src/app/[itemId]/page.tsx
 "use client"; // ⭐ 맨 위에 'use client' 지시어 유지 ⭐
-"use client";
 
 import { useEffect, useState, useRef } from "react";
 import { useRouter, useParams } from "next/navigation";
@@ -41,9 +40,7 @@ export default function ItemDetailPage() {
       setError(null);
       try {
         // ⭐ 여기를 수정했습니다. API_BASE_URL 제거 ⭐
-        const res = await fetch(
-          `/api/<span class="math-inline">\{TENANT\_ID\}/items/</span>{itemId}`
-        );
+        const res = await fetch(`/api/${TENANT_ID}/items/${itemId}`);
         if (!res.ok) {
           if (res.status === 404) {
             setError("할 일을 찾을 수 없습니다.");
@@ -101,16 +98,13 @@ export default function ItemDetailPage() {
     };
 
     try {
-      const response = await fetch(
-        `/api/<span class="math-inline">\{TENANT\_ID\}/items/</span>{id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(updatedItem),
-        }
-      );
+      const response = await fetch(`/api/${TENANT_ID}/items/${itemId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedItem),
+      });
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -178,16 +172,13 @@ export default function ItemDetailPage() {
 
     try {
       // ⭐ 여기를 수정했습니다. API_BASE_URL 제거 ⭐
-      const res = await fetch(
-        `/api/<span class="math-inline">\{TENANT\_ID\}/items/</span>{updatedItem.id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(updatedItem),
-        }
-      );
+      const res = await fetch(`/api/${TENANT_ID}/items/${itemId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedItem),
+      });
 
       if (!res.ok) {
         throw new Error(`Failed to update item: ${res.statusText}`);
@@ -218,12 +209,9 @@ export default function ItemDetailPage() {
 
     try {
       // ⭐ 여기를 수정했습니다. API_BASE_URL 제거 ⭐
-      const res = await fetch(
-        `/api/<span class="math-inline">\{TENANT\_ID\}/items/</span>{item.id}`,
-        {
-          method: "DELETE",
-        }
-      );
+      const res = await fetch(`/api/${TENANT_ID}/items/${itemId}`, {
+        method: "DELETE",
+      });
       if (!res.ok) {
         throw new Error(`Failed to delete item: ${res.statusText}`);
       }
@@ -278,90 +266,93 @@ export default function ItemDetailPage() {
           onNameChange={handleNameChange}
           onToggleStatus={handleToggleTodoStatus}
         />
-
-        <div className={styles.imageInputContainer}>
-          {editedImageUrl ? (
-            <>
-              <Image
-                src={editedImageUrl}
-                alt="할 일 관련 이미지"
-                width={600}
-                height={311}
-                style={{ objectFit: "cover", borderRadius: "12px" }}
-                className={styles.uploadedImage}
-              />
-              <div className={styles.imageButtons}>
+        <div className={styles.detailContainer}>
+          <div className={styles.imageInputContainer}>
+            {editedImageUrl ? (
+              <>
+                <Image
+                  src={editedImageUrl}
+                  alt="할 일 관련 이미지"
+                  width={600}
+                  height={311}
+                  style={{ objectFit: "cover", borderRadius: "12px" }}
+                  className={styles.uploadedImage}
+                />
+                <div className={styles.imageButtons}>
+                  <Button
+                    variant="detailImageEdit"
+                    icon="edit"
+                    onClick={handleImageButtonClick}
+                    aria-label="이미지 수정"
+                  />
+                </div>
+              </>
+            ) : (
+              <div
+                className={styles.imagePlaceholder}
+                onClick={handleImageButtonClick}
+              >
+                <Image
+                  src="/ic/img.svg"
+                  alt="이미지 추가 아이콘"
+                  width={60}
+                  height={60}
+                  className={styles.placeholderIcon}
+                />
                 <Button
-                  variant="detailImageEdit"
-                  icon="edit"
-                  onClick={handleImageButtonClick}
-                  aria-label="이미지 수정"
+                  variant="detailImageAdd"
+                  icon="plusLarge"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleImageButtonClick();
+                  }}
+                  className={styles.imageAddButton}
+                  aria-label="이미지 추가"
                 />
               </div>
-            </>
-          ) : (
-            <div
-              className={styles.imagePlaceholder}
-              onClick={handleImageButtonClick}
-            >
-              <Image
-                src="/ic/img.svg"
-                alt="이미지 추가 아이콘"
-                width={60}
-                height={60}
-                className={styles.placeholderIcon}
-              />
-              <Button
-                variant="detailImageAdd"
-                icon="plusLarge"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleImageButtonClick();
-                }}
-                className={styles.imageAddButton}
-                aria-label="이미지 추가"
+            )}
+            <input
+              type="file"
+              accept="image/*"
+              ref={fileInputRef}
+              onChange={handleImageFileChange}
+              style={{ display: "none" }}
+            />
+          </div>
+
+          <div className={styles.moveContainer}>
+            {/* Memo 섹션 - ItemDetailPage에서 직접 구현 */}
+            <div className={styles.memoContainer}>
+              <div className={styles.memoTitle}>Memo</div>
+              <textarea
+                className={styles.memoTextarea}
+                value={editedMemo}
+                onChange={(e) => handleMemoChange(e.target.value)}
+                placeholder="메모를 입력하세요..."
               />
             </div>
-          )}
-          <input
-            type="file"
-            accept="image/*"
-            ref={fileInputRef}
-            onChange={handleImageFileChange}
-            style={{ display: "none" }}
-          />
-        </div>
 
-        {/* Memo 섹션 - ItemDetailPage에서 직접 구현 */}
-        <div className={styles.memoContainer}>
-          <div className={styles.memoTitle}>Memo</div>
-          <textarea
-            className={styles.memoTextarea}
-            value={editedMemo}
-            onChange={(e) => handleMemoChange(e.target.value)}
-            placeholder="메모를 입력하세요..."
-          />
-        </div>
-
-        {/* 버튼 그룹 */}
-        <div className={styles.buttonGroup}>
-          <Button
-            type="button"
-            variant="submitSuccess"
-            icon="check"
-            onClick={handleSaveItem}
-            isActive={isCompleted}
-          >
-            수정 완료
-          </Button>
-          <Button
-            type="button"
-            variant="delete"
-            icon="x"
-            onClick={handleDeleteItem}
-          >
-            삭제하기
-          </Button>
+            {/* 버튼 그룹 */}
+            <div className={styles.buttonGroup}>
+              <Button
+                type="button"
+                variant="submitSuccess"
+                icon="check"
+                onClick={handleSaveItem}
+                isActive={isCompleted}
+              >
+                수정 완료
+              </Button>
+              <Button
+                type="button"
+                variant="delete"
+                icon="x"
+                onClick={handleDeleteItem}
+              >
+                삭제하기
+              </Button>
+            </div>
+          </div>
         </div>
       </main>
     </div>
