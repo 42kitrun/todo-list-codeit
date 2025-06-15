@@ -46,7 +46,7 @@ const HomePage: React.FC = () => {
       // API 응답 데이터 구조에 맞춰 파싱
       const result: {
         success: boolean;
-        data: { items: TodoItem[]; page: any };
+        data: { items: TodoItem[]; page: unknown };
       } = await response.json();
       if (!result.success) {
         throw new Error(result.message || "Failed to fetch items from API");

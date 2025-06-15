@@ -14,15 +14,12 @@ const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3000";
 const TENANT_ID = "defaultTenant";
 
-interface ItemDetailPageProps {
-  params: {
-    itemId: string;
-  };
-}
-
-const ItemDetailPage: React.FC<ItemDetailPageProps> = ({ params }) => {
+export default function ItemDetailPage({
+  params,
+}: {
+  params: { itemId: string };
+}) {
   const router = useRouter();
-  // ⭐ 다시 원래대로 params.itemId에 직접 접근합니다.
   const itemId = Number(params.itemId);
 
   const [item, setItem] = useState<Item | null>(null);
@@ -172,12 +169,12 @@ const ItemDetailPage: React.FC<ItemDetailPageProps> = ({ params }) => {
     fileInputRef.current?.click();
   };
 
-  const handleDeleteImage = () => {
-    setEditedImageUrl(null);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
-  };
+  // const handleDeleteImage = () => {
+  //   setEditedImageUrl(null);
+  //   if (fileInputRef.current) {
+  //     fileInputRef.current.value = "";
+  //   }
+  // };
 
   const handleSaveItem = async () => {
     if (!item) return;
@@ -379,6 +376,4 @@ const ItemDetailPage: React.FC<ItemDetailPageProps> = ({ params }) => {
       </main>
     </div>
   );
-};
-
-export default ItemDetailPage;
+}
