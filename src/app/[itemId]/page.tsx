@@ -1,9 +1,9 @@
 // src/app/[itemId]/page.tsx
-"use client";
+"use client"; // ⭐ 맨 위에 'use client' 지시어 유지 ⭐
 
 // 'use' 훅은 더 이상 필요 없으므로 제거합니다.
 import { useEffect, useState, useRef } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation"; // ⭐ useParams 임포트 추가 ⭐
 import Image from "next/image";
 import CheckListDetail from "@/components/todo/CheckListDetail";
 import Button from "@/components/todo/Button";
@@ -14,13 +14,19 @@ const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3000";
 const TENANT_ID = "defaultTenant";
 
-export default function ItemDetailPage({
-  params,
-}: {
-  params: { itemId: string };
-}) {
+// ⭐ ItemDetailPageProps 인터페이스를 제거합니다. ⭐
+// interface ItemDetailPageProps {
+//   params: {
+//     itemId: string;
+//   };
+// }
+
+// ⭐ 컴포넌트 함수에서 props를 받지 않고, useParams 훅을 사용합니다. ⭐
+export default function ItemDetailPage() {
+  // ⭐ 여기를 수정했습니다. ⭐
   const router = useRouter();
-  const itemId = Number(params.itemId);
+  const params = useParams(); // ⭐ useParams 훅을 사용하여 params를 가져옵니다. ⭐
+  const itemId = Number(params.itemId); // ⭐ params.itemId는 이제 string으로 보장됩니다. ⭐
 
   const [item, setItem] = useState<Item | null>(null);
   const [editedName, setEditedName] = useState("");
@@ -34,7 +40,9 @@ export default function ItemDetailPage({
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (isNaN(itemId)) {
+    // useParams는 초기 렌더링 시점에 비어있을 수 있으므로, itemId가 유효한지 확인합니다.
+    if (!params.itemId || isNaN(itemId)) {
+      // ⭐ 조건 수정: params.itemId 존재 여부 확인 추가 ⭐
       setLoading(false);
       setError("아이템 ID가 유효하지 않습니다.");
       router.push("/");
@@ -80,7 +88,7 @@ export default function ItemDetailPage({
     };
 
     fetchItem();
-  }, [itemId, router]);
+  }, [itemId, router, params.itemId]); // ⭐ 의존성 배열에 params.itemId 추가 (안정성 확보) ⭐
 
   const handleNameChange = (newName: string) => {
     setEditedName(newName);
@@ -168,13 +176,6 @@ export default function ItemDetailPage({
   const handleImageButtonClick = () => {
     fileInputRef.current?.click();
   };
-
-  // const handleDeleteImage = () => {
-  //   setEditedImageUrl(null);
-  //   if (fileInputRef.current) {
-  //     fileInputRef.current.value = "";
-  //   }
-  // };
 
   const handleSaveItem = async () => {
     if (!item) return;

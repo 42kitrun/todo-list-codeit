@@ -1,231 +1,136 @@
-// /api/[tenantId]/items/[itemId]/route.ts
-
+// src/app/api/[tenantId]/items/[itemId]/route.ts
 import { NextRequest, NextResponse } from "next/server";
-import { getItemById, updateItem, deleteItem, Item } from "@/lib/data"; // Item 인터페이스도 import
+import {
+  getItemById,
+  updateItem,
+  deleteItem,
+  Item, // Item 인터페이스도 필요하니 임포트합니다.
+} from "@/lib/data"; // lib/data.ts에서 필요한 함수들을 가져옵니다.
 
-// UpdateItemDto 스키마 정의 (명세서 기반)
-interface UpdateItemDto {
-  name?: string;
-  memo?: string | null;
-  imageUrl?: string | null;
-  isCompleted?: boolean;
-}
-
-// GET: 특정 아이템 조회
+// GET /api/[tenantId]/items/[itemId] - 특정 아이템 조회
 export async function GET(
   request: NextRequest,
   { params }: { params: { tenantId: string; itemId: string } }
-): Promise<
-  NextResponse<{
-    success: boolean;
-    data?: Item | undefined;
-    message?: string | undefined;
-  }>
-> {
+) {
   const { tenantId, itemId } = params;
-  const itemIdNum = parseInt(itemId, 10);
+  const parsedItemId = parseInt(itemId, 10);
 
-  if (isNaN(itemIdNum)) {
+  if (isNaN(parsedItemId)) {
     return NextResponse.json(
-      {
-        success: false,
-        message: "Invalid itemId. Must be a number.",
-      },
+      { success: false, message: "Invalid itemId" },
       { status: 400 }
     );
   }
 
-  console.log(`GET /api/${tenantId}/items/${itemId}`);
+  const item = getItemById(tenantId, parsedItemId);
 
-  try {
-    const item = getItemById(tenantId, itemIdNum);
-
-    if (!item) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: "Item not found",
-        },
-        { status: 404 }
-      );
-    }
-
+  if (!item) {
     return NextResponse.json(
-      {
-        success: true,
-        data: item,
-      },
-      { status: 200 }
-    );
-  } catch (error) {
-    console.error(`Error fetching item ${itemId}:`, error);
-    return NextResponse.json(
-      {
-        success: false,
-        message: "Failed to fetch item",
-      },
-      { status: 500 }
+      { success: false, message: "Item not found" },
+      { status: 404 }
     );
   }
+
+  return NextResponse.json({ success: true, data: item });
 }
 
-// PUT: 특정 아이템 수정
+// PUT /api/[tenantId]/items/[itemId] - 특정 아이템 업데이트 (전체 교체)
 export async function PUT(
   request: NextRequest,
   { params }: { params: { tenantId: string; itemId: string } }
-): Promise<
-  NextResponse<{
-    success: boolean;
-    data?: Item | undefined;
-    message?: string | undefined;
-  }>
-> {
+) {
   const { tenantId, itemId } = params;
-  const itemIdNum = parseInt(itemId, 10);
+  const parsedItemId = parseInt(itemId, 10);
 
-  if (isNaN(itemIdNum)) {
+  if (isNaN(parsedItemId)) {
     return NextResponse.json(
-      {
-        success: false,
-        message: "Invalid itemId. Must be a number.",
-      },
+      { success: false, message: "Invalid itemId" },
       { status: 400 }
     );
   }
 
-  console.log(`PUT /api/${tenantId}/items/${itemId}`);
-
   try {
-    // 여기서 request.json()의 반환 값을 UpdateItemDto로 명시적으로 캐스팅합니다.
-    const body: UpdateItemDto = (await request.json()) as UpdateItemDto;
-    const { name, memo, imageUrl, isCompleted } = body;
+    const body = await request.json();
 
-    // 입력 유효성 검사 (UpdateItemDto 스키마)
-    if (name !== undefined && (typeof name !== "string" || name.length === 0)) {
+    // PUT 요청의 body는 모든 필드를 포함해야 합니다 (명세에 따라)
+    // partial이 아니라 전체 Item 구조를 요구
+    const updateData: Omit<Item, "id" | "tenantId"> = {
+      name: body.name,
+      memo: body.memo !== undefined ? body.memo : null,
+      imageUrl: body.imageUrl !== undefined ? body.imageUrl : null,
+      isCompleted: body.isCompleted,
+    };
+
+    // 필수 필드 검증 (name, isCompleted)
+    if (typeof updateData.name !== "string" || updateData.name.trim() === "") {
       return NextResponse.json(
         {
           success: false,
-          message: "Invalid name. Name must be a non-empty string.",
+          message: "Name is required and must be a non-empty string.",
         },
         { status: 400 }
       );
     }
-    if (memo !== undefined && memo !== null && typeof memo !== "string") {
+    if (typeof updateData.isCompleted !== "boolean") {
       return NextResponse.json(
-        {
-          success: false,
-          message: "Invalid memo. Memo must be a string or null.",
-        },
-        { status: 400 }
-      );
-    }
-    if (
-      imageUrl !== undefined &&
-      imageUrl !== null &&
-      typeof imageUrl !== "string"
-    ) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: "Invalid imageUrl. Image URL must be a string or null.",
-        },
-        { status: 400 }
-      );
-    }
-    if (isCompleted !== undefined && typeof isCompleted !== "boolean") {
-      return NextResponse.json(
-        {
-          success: false,
-          message: "Invalid isCompleted. isCompleted must be a boolean.",
-        },
+        { success: false, message: "isCompleted must be a boolean." },
         { status: 400 }
       );
     }
 
-    const updatedItem = updateItem(tenantId, itemIdNum, {
-      name,
-      memo,
-      imageUrl,
-      isCompleted,
-    });
+    const updatedItem = updateItem(tenantId, parsedItemId, updateData);
 
     if (!updatedItem) {
       return NextResponse.json(
-        {
-          success: false,
-          message: "Item not found for update",
-        },
+        { success: false, message: "Item not found or failed to update" },
         { status: 404 }
       );
     }
 
-    return NextResponse.json(
-      {
-        success: true,
-        data: updatedItem,
-      },
-      { status: 200 }
-    );
+    return NextResponse.json({ success: true, data: updatedItem });
   } catch (error) {
-    console.error(`Error updating item ${itemId}:`, error);
+    console.error("Error updating item:", error);
     return NextResponse.json(
       {
         success: false,
-        message: "Failed to update item",
-      },
-      { status: 500 }
-    );
-  }
-}
-
-// DELETE: 특정 아이템 삭제
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: { tenantId: string; itemId: string } }
-): Promise<NextResponse<{ success: boolean; message?: string | undefined }>> {
-  const { tenantId, itemId } = params;
-  const itemIdNum = parseInt(itemId, 10);
-
-  if (isNaN(itemIdNum)) {
-    return NextResponse.json(
-      {
-        success: false,
-        message: "Invalid itemId. Must be a number.",
+        message: "Failed to parse request body or internal error",
       },
       { status: 400 }
     );
   }
+}
 
-  console.log(`DELETE /api/${tenantId}/items/${itemId}`);
+// DELETE /api/[tenantId]/items/[itemId] - 특정 아이템 삭제
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: { tenantId: string; itemId: string } }
+) {
+  const { tenantId, itemId } = params;
+  const parsedItemId = parseInt(itemId, 10);
 
-  try {
-    const deleted = deleteItem(tenantId, itemIdNum);
-
-    if (!deleted) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: "Item not found for deletion",
-        },
-        { status: 404 }
-      );
-    }
-
+  if (isNaN(parsedItemId)) {
     return NextResponse.json(
-      {
-        success: true,
-        message: `Item ${itemId} deleted successfully`,
-      },
-      { status: 200 }
-    ); // 또는 204 No Content
-  } catch (error) {
-    console.error(`Error deleting item ${itemId}:`, error);
-    return NextResponse.json(
-      {
-        success: false,
-        message: "Failed to delete item",
-      },
-      { status: 500 }
+      { success: false, message: "Invalid itemId" },
+      { status: 400 }
     );
   }
+
+  const deleted = deleteItem(tenantId, parsedItemId);
+
+  if (!deleted) {
+    return NextResponse.json(
+      { success: false, message: "Item not found or failed to delete" },
+      { status: 404 }
+    );
+  }
+
+  return NextResponse.json({
+    success: true,
+    message: "Item deleted successfully",
+  });
 }
+
+// OPTIONS (CORS Preflight 요청 처리, 필요시 추가)
+// export async function OPTIONS(request: NextRequest) {
+//     return NextResponse.json({}, { status: 200 });
+// }

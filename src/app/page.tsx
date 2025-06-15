@@ -8,7 +8,6 @@ import styles from "./page.module.css";
 import Search from "@/components/common/Search";
 import Button from "@/components/todo/Button";
 import CheckListItem from "@/components/todo/CheckListItem";
-// import CheckListDetail from "@/components/todo/CheckListDetail"; // 상세 페이지로 직접 이동하므로 이 임포트 제거
 
 // API 명세 및 lib/data.ts의 Item 타입에 맞게 TodoItem 타입 정의
 interface TodoItem {
