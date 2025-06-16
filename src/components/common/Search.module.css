@@ -1,53 +1,73 @@
 /* src/components/common/Search.module.css */
+
+/**
+ * @file Search.module.css
+ * @brief 검색 입력 필드(Search Input) 컴포넌트의 스타일을 정의합니다.
+ *
+ * 이 CSS 모듈은 검색 입력 필드의 레이아웃, 시각적 디자인,
+ * 그리고 그림자 효과를 위한 추가 요소를 포함합니다.
+ */
+
+/*
+ * .searchContainer: 검색 입력 필드 전체를 감싸는 컨테이너
+ * 그림자 배경과 실제 입력 필드를 포함하며, 레이아웃을 정의합니다.
+ */
 .searchContainer {
-  width: 100%;
-  height: 56px; /* 버튼 높이에 그림자 높이 4px 포함 (52 + 4) */
-  display: flex; /* input을 중앙 정렬하거나 패딩을 주기 위해 */
-
-  position: relative; /* 자식 요소인 buttonShadowBackground를 absolute로 배치하기 위함 */
-  display: flex; /* 버튼을 중앙 정렬하기 위함 */
-  justify-content: center;
-  align-items: center; /* 세로 중앙 정렬 */
-  /* width와 height는 내부 button이 결정하므로 여기서는 최소한의 설정만 */
+  width: 100%; /* 부모 요소의 전체 너비를 차지 */
+  height: 56px; /* 컴포넌트의 전체 높이 (버튼 높이 52px + 그림자 높이 4px = 56px) */
+  display: flex; /* Flexbox 레이아웃 사용 */
+  justify-content: center; /* 자식 요소들을 가로 중앙 정렬 */
+  align-items: center; /* 자식 요소들을 세로 중앙 정렬 */
+  position: relative; /* 자식 요소인 `.ShadowBackground`를 `absolute`로 배치하기 위한 기준점 */
 }
 
-/* 버튼 그림자 역할을 하는 둥근 직사각형 */
+/*
+ * .ShadowBackground: 입체적인 그림자 효과를 내는 요소
+ * 실제 입력 필드 뒤에 배치되어 그림자처럼 보입니다.
+ */
 .ShadowBackground {
-  position: absolute;
-  background: var(--slate-900); /* 그림자 색상 #0F172A */
-  border: 2px solid var(--slate-900); /* 그림자 테두리 색상 #0F172A */
-  border-radius: 23px; /* 시안과 동일한 border-radius */
-  z-index: 0; /* btnBase 뒤에 위치 */
-  top: 5px; /* 시안 top: 4px */
-  left: 4.5px; /* left/right는 각 variant에서 설정 */
-  width: 100%; /* 내부 버튼의 너비와 동일하게 설정 (각 variant에서 오버라이드) */
-  height: 52px; /* 버튼 높이와 동일 */
+  position: absolute; /* 부모 `.searchContainer`에 대해 절대 위치 지정 */
+  background: var(--slate-900); /* 그림자 배경색 */
+  border: 2px solid var(--slate-900); /* 그림자 테두리 색상 */
+  border-radius: 23px; /* 시안과 동일한 둥근 모서리 */
+  z-index: 0; /* 실제 입력 필드(z-index: 1) 뒤에 위치하도록 설정 */
+  top: 5px; /* 시안 기준 상단에서 5px 떨어진 위치 */
+  left: 4.5px; /* 시안 기준 왼쪽에서 4.5px 떨어진 위치 */
+  width: 100%; /* 기본적으로 부모의 너비를 따르지만, 특정 variant에서 오버라이드 가능 */
+  height: 52px; /* 실제 입력 필드의 높이와 동일하게 설정 */
 }
 
+/*
+ * .searchContainer input: 실제 검색 입력 필드 (input 태그)
+ * 사용자가 텍스트를 입력하는 부분의 스타일을 정의합니다.
+ */
 .searchContainer input {
-  height: 52px;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-nanum-square), sans-serif; /* NanumSquare 폰트 적용 */
-  font-weight: 700; /* NanumSquare Bold */
-  font-size: 16px; /* 시안 폰트 크기 */
-  line-height: 100%;
-  letter-spacing: 0%;
-
-  vertical-align: middle;
-  cursor: pointer;
-  box-sizing: border-box;
-  border-radius: 23px; /* 기본 둥근 모서리, 각 variant에서 오버라이드 가능 */
-  border: 2px solid var(--slate-900); /* 모든 버튼에 기본 테두리 */
-  position: relative; /* shadowBackground 위에 오도록 */
-  z-index: 1; /* shadowBackground 위에 오도록 */
-  top: 0; /* 초기 위치 */
-  left: 0; /* 초기 위치 */
-  padding: 0 24px;
+  height: 52px; /* 입력 필드의 높이 */
+  width: 100%; /* 부모의 너비를 꽉 채움 */
+  display: flex; /* Flexbox 속성을 사용하여 텍스트 정렬에 활용 */
+  align-items: center; /* 텍스트를 세로 중앙 정렬 */
+  justify-content: center; /* 텍스트를 가로 중앙 정렬 (필요시) */
+  font-family: var(--font-nanum-square-regular), sans-serif; /* NanumSquare 폰트 적용 */
+  font-weight: 700; /* NanumSquare Bold에 해당하는 굵기 */
+  font-size: 16px; /* 시안 기준 폰트 크기 */
+  line-height: 100%; /* 텍스트 줄 높이 */
+  letter-spacing: 0%; /* 글자 간격 */
+  vertical-align: middle; /* 세로 정렬 (Flexbox 사용 시 불필요할 수 있으나 유지) */
+  cursor: text; /* 텍스트 입력 필드임을 나타내는 커서 모양 */
+  box-sizing: border-box; /* 패딩과 보더가 너비/높이에 포함되도록 설정 */
+  border-radius: 23px; /* 둥근 모서리 */
+  border: 2px solid var(--slate-900); /* 기본 테두리 색상 */
+  position: relative; /* `.ShadowBackground` 위에 오도록 위치 설정 */
+  z-index: 1; /* `.ShadowBackground`보다 위에 위치하도록 설정 */
+  top: 0; /* 초기 상단 위치 */
+  left: 0; /* 초기 왼쪽 위치 */
+  padding: 0 24px; /* 좌우 내부 여백 (텍스트와 테두리 사이 공간) */
 }
 
+/*
+ * .searchContainer input::placeholder: 플레이스홀더 텍스트 스타일
+ * 입력 필드에 아무것도 입력되지 않았을 때 표시되는 텍스트의 스타일을 정의합니다.
+ */
 .searchContainer input::placeholder {
-  color: var(--text-placeholder); /* slate/400 플레이스홀더 색상 */
+  color: var(--text-placeholder); /* 플레이스홀더 텍스트 색상 (slate-400) */
 }

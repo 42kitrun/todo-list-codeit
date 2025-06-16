@@ -1,99 +1,134 @@
 /* src/app/page.module.css */
 
+/**
+ * @file page.module.css
+ * @brief 할 일 목록 메인 페이지 (app/page.tsx)의 레이아웃과 스타일을 정의합니다.
+ *
+ * 이 파일은 모바일 우선(Mobile First) 방식으로 디자인되었으며,
+ * 태블릿 및 데스크톱 뷰포트에 대한 반응형 스타일을 포함합니다.
+ */
+
+/*
+ * 컨테이너 기본 스타일
+ * 전체 페이지의 배경과 기본 너비를 설정합니다.
+ */
 .container {
-  background-color: var(--background);
-  width: 100%; /* 부모(appContainer)의 100%를 따름 */
-  max-width: none; /* 상위 appContainer가 max-width를 가지므로 여기서는 제한 없음 */
-  margin: 0; /* 마진 제거 */
-  padding: 0; /* 패딩 제거 */
+  background-color: var(--background); /* 전역 배경색 변수 사용 */
+  width: 100%; /* 부모 요소의 전체 너비를 따름 */
+  max-width: none; /* 상위 컨테이너에서 최대 너비를 제한하므로 여기서는 제한 없음 */
+  margin: 0; /* 외부 여백 제거 */
+  padding: 0; /* 내부 여백 제거 */
 }
 
 /* ------------------------------------------------------------- */
 /* .mainContent (Mobile First) */
 /* ------------------------------------------------------------- */
+/*
+ * 메인 컨텐츠 영역 스타일 (모바일 우선)
+ * 페이지의 주요 내용을 담는 컨테이너로, 모바일에서는 세로 정렬됩니다.
+ */
 .mainContent {
-  /* background-color: azure; */ /* 확인용 배경색 제거 */
-  padding: 24px 20px; /* 모바일 시안 (image_367d74.png) 패딩: 상 24px, 좌우 20px */
-  max-width: 1200px; /* 데스크톱 시안의 전체 콘텐츠 너비 */
-  margin: 0 auto; /* 중앙 정렬 */
-  display: flex;
-  flex-direction: column;
-  gap: 24px; /* 모바일 시안 (image_367d74.png) 섹션 간의 간격 */
+  padding: 24px 20px; /* 모바일 시안 기준 패딩: 상하 24px, 좌우 20px */
+  max-width: 1200px; /* 데스크톱 시안의 최대 콘텐츠 너비 */
+  margin: 0 auto; /* 가로 중앙 정렬 */
+  display: flex; /* Flexbox 레이아웃 사용 */
+  flex-direction: column; /* 기본은 세로(컬럼) 정렬 */
+  gap: 24px; /* 모바일 시안 기준 섹션 간의 간격 */
 }
 
-/* 태블릿 (min-width 부터 시작) */
+/*
+ * 태블릿 뷰포트 스타일 (최소 너비: var(--tablet-min-width) 이상)
+ */
 @media (min-width: var(--tablet-min-width)) {
   .mainContent {
-    padding: 32px 32px; /* 태블릿 시안 패딩: 상 32px, 좌우 32px */
-    gap: 32px; /* 태블릿 섹션 간의 간격 */
+    padding: 32px 32px; /* 태블릿 시안 기준 패딩: 상하 32px, 좌우 32px */
+    gap: 32px; /* 태블릿 시안 기준 섹션 간의 간격 */
   }
 }
 
-/* 데스크톱 (min-width 부터 시작) */
+/*
+ * 데스크톱 뷰포트 스타일 (최소 너비: var(--desktop-min-width) 이상)
+ */
 @media (min-width: var(--desktop-min-width)) {
   .mainContent {
-    padding: 32px 20px; /* 데스크톱 시안의 패딩 */
-    gap: 40px; /* 데스크톱 섹션 간의 간격 */
+    padding: 32px 20px; /* 데스크톱 시안 기준 패딩 */
+    gap: 40px; /* 데스크톱 시안 기준 섹션 간의 간격 */
   }
 }
 
 /* ------------------------------------------------------------- */
 /* Search와 버튼 컨테이너 (모든 해상도에서 동일) */
 /* ------------------------------------------------------------- */
+/*
+ * 검색창과 '할 일 추가' 버튼을 포함하는 컨테이너입니다.
+ * 모든 해상도에서 가로 정렬을 유지합니다.
+ */
 .searchAndButtonContainer {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  width: 100%;
-  gap: 10px; /* 검색창과 버튼 사이 간격 */
+  display: flex; /* Flexbox 레이아웃 사용 */
+  flex-direction: row; /* 가로(로우) 정렬 */
+  align-items: center; /* 세로 중앙 정렬 */
+  width: 100%; /* 부모 너비에 맞춤 */
+  gap: 10px; /* 검색창과 버튼 사이의 간격 */
 }
 
 /* ------------------------------------------------------------- */
 /* .todoAndDoneSection (Mobile First) */
 /* ------------------------------------------------------------- */
+/*
+ * '할 일' 섹션과 '완료된 일' 섹션을 포함하는 컨테이너입니다.
+ * 모바일/태블릿에서는 세로로 정렬되고, 데스크톱에서는 가로로 정렬됩니다.
+ */
 .todoAndDoneSection {
-  /* background-color: beige; */ /* 확인용 배경색 제거 */
-  display: flex;
+  display: flex; /* Flexbox 레이아웃 사용 */
   flex-direction: column; /* 모바일/태블릿 기본값: 세로 정렬 */
   gap: 24px; /* 모바일/태블릿 기본 간격 */
-  width: 100%;
+  width: 100%; /* 부모 너비에 맞춤 */
 }
 
-/* 데스크톱 (min-width 부터 시작) */
+/*
+ * 데스크톱 뷰포트 스타일
+ */
 @media (min-width: var(--desktop-min-width)) {
   .todoAndDoneSection {
-    flex-direction: row !important; /* 데스크톱에서 가로 정렬 */
-    gap: 40px;
+    flex-direction: row !important; /* 데스크톱에서 가로 정렬 (important로 우선순위 높임) */
+    gap: 40px; /* 데스크톱에서 섹션 간의 간격 */
   }
 }
 
 /* ------------------------------------------------------------- */
 /* .todoSection, .doneSection (Mobile First) */
 /* ------------------------------------------------------------- */
+/*
+ * '할 일' 목록과 '완료된 일' 목록 각각의 컨테이너입니다.
+ * 내부 아이템(예: 목록 제목, 할 일 목록)은 기본적으로 세로 정렬됩니다.
+ */
 .todoSection,
 .doneSection {
-  /* background-color: yellow; */ /* 확인을 위한 임시 배경색 제거 */
-  display: flex;
-  flex-direction: column; /* 섹션 내부 아이템(예: 이미지, 목록)은 기본적으로 세로 정렬 */
+  display: flex; /* Flexbox 레이아웃 사용 */
+  flex-direction: column; /* 섹션 내부 아이템은 세로 정렬 */
   gap: 24px; /* 모바일/태블릿 섹션 내부 아이템 간의 간격 */
-  /* 데스크톱에서 flex: 1; 을 적용할 것이므로, 여기서는 기본 너비 설정을 하지 않음 */
+  /* 데스크톱에서 flex: 1; 을 적용할 것이므로, 여기서는 기본 너비 설정을 하지 않습니다. */
 }
 
-/* 태블릿 (min-width 부터 시작, 필요시 추가) */
-/* 현재 태블릿과 모바일의 gap이 동일하므로 별도 미디어 쿼리 없음 */
+/*
+ * 태블릿 뷰포트 스타일 (필요시 추가)
+ * 현재 시안에서 태블릿과 모바일의 gap이 동일하므로 별도 미디어 쿼리 없음.
+ * 하지만 명시적으로 구분할 필요가 있다면 여기에 추가할 수 있습니다.
+ */
 @media (min-width: var(--tablet-min-width)) {
   .todoSection,
   .doneSection {
-    /* flex: 1;  이것은 데스크톱에서만 적용하는게 시안에 맞습니다.*/
     gap: 24px; /* 태블릿 섹션 내부 아이템 간의 간격 */
   }
 }
 
-/* 데스크톱 (min-width 부터 시작) */
+/*
+ * 데스크톱 뷰포트 스타일
+ */
 @media (min-width: var(--desktop-min-width)) {
   .todoSection,
   .doneSection {
-    flex: 1; /* 데스크톱에서 각 섹션이 부모 공간을 동일하게 나눠갖도록 */
+    flex: 1; /* 데스크톱에서 각 섹션이 부모 공간을 동일하게 나눠 갖도록 설정 */
     gap: 24px; /* 데스크톱 섹션 내부 아이템 간의 간격 */
   }
 }
@@ -101,67 +136,84 @@
 /* ------------------------------------------------------------- */
 /* .todoList, .doneList (Mobile First) */
 /* ------------------------------------------------------------- */
+/*
+ * 실제 할 일 아이템들이 나열되는 목록 컨테이너입니다.
+ */
 .todoList,
 .doneList {
   width: 100%; /* 부모 섹션의 너비를 꽉 채움 */
-  display: flex; /* Flexbox 사용 */
+  display: flex; /* Flexbox 레이아웃 사용 */
   flex-direction: column; /* 아이템들을 세로로 쌓음 */
-  gap: 16px; /* 모바일/데스크톱 아이템 간의 간격 */
-  /* background-color: green; */ /* 확인용 배경색 제거 */
+  gap: 16px; /* 모바일/데스크톱 목록 아이템 간의 간격 */
   align-items: flex-start; /* 아이템들이 왼쪽으로 정렬되도록 명시 */
 }
 
-/* 태블릿 (min-width 부터 시작) */
+/*
+ * 태블릿 뷰포트 스타일
+ */
 @media (min-width: var(--tablet-min-width)) {
   .todoList,
   .doneList {
-    gap: 12px; /* 태블릿 목록 아이템 간격 시안에 따라 조정 */
+    gap: 12px; /* 태블릿 시안에 맞춰 목록 아이템 간격 조정 */
   }
 }
 
 /* ------------------------------------------------------------- */
 /* Empty State (Mobile First) */
 /* ------------------------------------------------------------- */
+/*
+ * 할 일 목록이 비어 있을 때 표시되는 '비어있음' 상태 메시지 컨테이너입니다.
+ */
 .emptyState {
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* 시안에 맞춰 왼쪽 정렬 */
-  justify-content: flex-start; /* 상단 정렬 */
-  gap: 16px; /* 이미지와 텍스트 사이 간격 */
+  display: flex; /* Flexbox 레이아웃 사용 */
+  flex-direction: column; /* 세로 정렬 */
+  align-items: center; /* 자식 요소들을 가로 중앙으로 정렬 (텍스트는 left) */
+  justify-content: flex-start; /* 세로 상단 정렬 */
+  gap: 16px; /* 이미지와 텍스트 사이의 간격 */
   padding: 24px 0; /* 모바일 시안 상하 패딩 */
-  text-align: left; /* 텍스트도 왼쪽 정렬 */
-  margin-left: 12px; /* 모바일도 왼쪽 여백 유지 */
+  text-align: left; /* 내부 텍스트는 왼쪽 정렬 */
+  margin-left: 12px; /* 모바일에서도 왼쪽 여백 유지 */
 }
 
+/*
+ * '비어있음' 상태에서 큰 이미지 (데스크톱/태블릿용)
+ */
 .emptyImageLarge {
-  display: none; /* 모바일에서는 large 숨김 (Mobile First) */
+  display: none; /* 모바일에서는 기본적으로 숨김 (Mobile First) */
 }
 
+/*
+ * '비어있음' 상태에서 작은 이미지 (모바일용)
+ */
 .emptyImageSmall {
-  display: block; /* 모바일에서는 small 표시 (Mobile First) */
+  display: block; /* 모바일에서는 기본적으로 표시 (Mobile First) */
 }
 
-/* 태블릿 (min-width 부터 시작) */
+/*
+ * 태블릿 뷰포트 스타일
+ */
 @media (min-width: var(--tablet-min-width)) {
   .emptyState {
-    padding: 32px 0;
-    margin-left: 12px; /* 태블릿도 왼쪽 여백 유지 */
+    padding: 32px 0; /* 태블릿 시안 상하 패딩 */
+    margin-left: 12px; /* 태블릿에서도 왼쪽 여백 유지 */
   }
   .emptyImageLarge {
-    display: block; /* 태블릿에서는 large 표시 */
+    display: block; /* 태블릿에서는 큰 이미지 표시 */
   }
   .emptyImageSmall {
-    display: none; /* 태블릿에서는 small 숨김 */
+    display: none; /* 태블릿에서는 작은 이미지 숨김 */
   }
 }
 
-/* 데스크톱 (min-width 부터 시작) */
+/*
+ * 데스크톱 뷰포트 스타일
+ */
 @media (min-width: var(--desktop-min-width)) {
   .emptyState {
     padding: 40px 0; /* 데스크톱 시안 상하 패딩 */
-    margin-left: 12px; /* 데스크톱도 왼쪽 여백 유지 */
+    margin-left: 12px; /* 데스크톱에서도 왼쪽 여백 유지 */
   }
-  /* 데스크톱에서도 Large 이미지 유지, Small 숨김 (태블릿과 동일) */
+  /* 데스크톱에서도 Large 이미지가 표시되고 Small 이미지는 숨겨집니다. */
   .emptyImageLarge {
     display: block;
   }
@@ -173,16 +225,22 @@
 /* ------------------------------------------------------------- */
 /* 기타 스타일 (Mobile First 고려) */
 /* ------------------------------------------------------------- */
+/*
+ * 로딩 및 에러 메시지 텍스트 스타일
+ */
 .loadingText,
 .errorText {
-  text-align: center;
-  font-family: var(--font-nanum-square-regular), sans-serif;
-  font-size: 18px;
-  color: var(--slate-600);
-  padding: 40px 0; /* 모든 화면에서 동일하게 유지 */
+  text-align: center; /* 텍스트 중앙 정렬 */
+  font-family: var(--font-nanum-square-regular), sans-serif; /* 폰트 적용 */
+  font-size: 18px; /* 글꼴 크기 */
+  color: var(--slate-600); /* 글꼴 색상 */
+  padding: 40px 0; /* 모든 화면에서 동일하게 유지되는 상하 패딩 */
 }
 
+/*
+ * 에러 메시지 텍스트에 대한 추가 스타일
+ */
 .errorText {
-  color: var(--rose-500);
-  font-weight: 700;
+  color: var(--rose-500); /* 에러 메시지 색상 */
+  font-weight: 700; /* 글꼴 두께 */
 }

@@ -1,61 +1,93 @@
 /* src/app/[itemId]/page.module.css */
 
+/**
+ * @file page.module.css
+ * @brief 할 일 상세 페이지 ([itemId]/page.jsx)의 레이아웃과 스타일을 정의합니다.
+ *
+ * 이 파일은 모바일 우선(Mobile First) 방식으로 디자인되었으며,
+ * 태블릿 및 데스크톱 뷰포트에 대한 반응형 스타일을 포함합니다.
+ */
+
+/*
+ * 컨테이너 기본 스타일
+ * 전체 페이지의 배경과 기본 너비를 설정합니다.
+ */
 .container {
   background-color: var(--background);
   width: 100%;
-  max-width: none;
-  margin: 0;
-  padding: 0;
+  max-width: none; /* 최대 너비 제한 없음 */
+  margin: 0; /* 외부 여백 없음 */
+  padding: 0; /* 내부 여백 없음 */
 }
 
 /* ------------------------------------------------------------- */
 /* .mainContent (Mobile First) */
 /* ------------------------------------------------------------- */
+/*
+ * 메인 컨텐츠 영역 스타일 (모바일 우선)
+ * 페이지의 주요 내용을 담는 컨테이너로, 모바일에서는 세로 정렬됩니다.
+ */
 .mainContent {
-  padding: 24px 20px;
-  max-width: 1200px;
-  margin: 0 auto;
+  padding: 24px 20px; /* 상하 24px, 좌우 20px 내부 여백 */
+  max-width: 1200px; /* 최대 너비 */
+  margin: 0 auto; /* 가로 중앙 정렬 */
   display: flex;
   flex-direction: column; /* 기본은 세로 정렬 */
-  align-items: center;
-  gap: 24px;
+  align-items: center; /* 자식 요소들을 가로 중앙으로 정렬 */
+  gap: 24px; /* 자식 요소들 간의 간격 */
 }
 
-/* 로딩 및 에러 메시지 스타일 */
+/*
+ * 로딩 및 에러 메시지 상태 스타일
+ * 데이터 로딩 중이거나 에러 발생 시 표시되는 메시지의 스타일입니다.
+ */
 .loadingErrorState {
-  text-align: center;
-  padding: 50px;
-  font-size: 1.2em;
-  color: var(--text-secondary);
+  text-align: center; /* 텍스트 중앙 정렬 */
+  padding: 50px; /* 내부 여백 */
+  font-size: 1.2em; /* 글꼴 크기 */
+  color: var(--text-secondary); /* 글꼴 색상 */
 }
 
+/*
+ * 상세 정보 컨테이너 스타일
+ * 이미지 섹션과 메모 섹션을 포함하는 컨테이너입니다.
+ */
 .detailContainer {
-  width: 100%;
-  /* height: 100%; // ⭐ 이 'height: 100%'는 상황에 따라 문제가 될 수 있습니다. 만약 부모의 높이가 명확하지 않다면, 자식 요소들이 높이를 결정하도록 'auto'로 두거나 제거하는 것을 고려해 보세요. ⭐ */
+  width: 100%; /* 부모 너비에 맞춤 */
+  /* height: 100%; // 이 'height: 100%'는 부모의 높이가 명확하지 않을 경우 문제가 될 수 있습니다.
+                   // 자식 요소들이 높이를 결정하도록 'auto'로 두거나 제거하는 것을 고려하세요. */
   display: flex;
   flex-direction: column; /* 기본은 세로 정렬 */
-  align-items: center;
-  gap: 24px;
+  align-items: center; /* 자식 요소들을 가로 중앙으로 정렬 */
+  gap: 24px; /* 자식 요소들 간의 간격 */
 }
 
 /* ============================================================= */
 /* 이미지 섹션 스타일 */
 /* ============================================================= */
+/*
+ * 이미지 입력 컨테이너 스타일
+ * 할 일과 관련된 이미지를 표시하고 업로드하는 영역입니다.
+ */
 .imageInputContainer {
-  position: relative;
+  position: relative; /* 자식 요소들의 절대 위치 지정을 위한 기준 */
   width: 100%; /* 모바일: 전체 너비 */
-  max-width: 996px;
-  height: 311px;
-  border-radius: 24px;
-  overflow: hidden;
+  max-width: 996px; /* 최대 너비 */
+  height: 311px; /* 고정 높이 */
+  border-radius: 24px; /* 둥근 모서리 */
+  overflow: hidden; /* 컨테이너를 벗어나는 내용 숨김 */
   display: flex;
-  justify-content: center;
-  align-items: center;
-  box-sizing: border-box;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-  background-color: var(--slate-100);
+  justify-content: center; /* 가로 중앙 정렬 */
+  align-items: center; /* 세로 중앙 정렬 */
+  box-sizing: border-box; /* 패딩과 보더가 너비/높이에 포함되도록 */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* 그림자 효과 */
+  background-color: var(--slate-100); /* 배경색 */
 }
 
+/*
+ * 이미지 플레이스홀더 스타일
+ * 이미지가 없을 때 표시되는 점선 테두리 영역입니다.
+ */
 .imagePlaceholder {
   width: 100%;
   height: 100%;
@@ -63,166 +95,206 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border: 2px dashed var(--slate-300);
-  cursor: pointer;
-  position: relative;
+  border: 2px dashed var(--slate-300); /* 점선 테두리 */
+  cursor: pointer; /* 마우스 오버 시 커서 변경 */
+  position: relative; /* 자식 요소 위치 지정을 위한 기준 */
 }
 
+/*
+ * 이미지 추가 버튼 스타일
+ * 이미지가 없을 때 이미지를 추가하는 버튼입니다.
+ */
 .imageAddButton {
-  position: absolute;
-  bottom: 24px;
-  right: 24px;
-  z-index: 10;
+  position: absolute; /* 절대 위치 */
+  bottom: 24px; /* 하단에서 24px */
+  right: 24px; /* 오른쪽에서 24px */
+  z-index: 10; /* 다른 요소 위에 표시 */
 }
 
+/*
+ * 업로드된 이미지 스타일
+ * 업로드된 이미지가 표시되는 방식입니다.
+ */
 .uploadedImage {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* ⭐ 'fill'에서 'cover'로 변경했습니다. 이미지의 비율을 유지하면서 영역을 채웁니다. ⭐ */
-  border-radius: 12px;
-  display: block;
+  object-fit: cover; /* 이미지 비율을 유지하면서 영역을 채우고, 넘치는 부분은 잘라냅니다. */
+  border-radius: 12px; /* 둥근 모서리 */
+  display: block; /* 블록 레벨 요소로 설정 */
 }
 
+/*
+ * 이미지 버튼 그룹 스타일
+ * 이미지가 있을 때 표시되는 버튼(예: 수정, 삭제) 그룹입니다.
+ */
 .imageButtons {
-  position: absolute;
-  bottom: 24px;
-  right: 24px;
+  position: absolute; /* 절대 위치 */
+  bottom: 24px; /* 하단에서 24px */
+  right: 24px; /* 오른쪽에서 24px */
   display: flex;
-  gap: 8px;
-  z-index: 10;
+  gap: 8px; /* 버튼 간의 간격 */
+  z-index: 10; /* 다른 요소 위에 표시 */
 }
 
+/*
+ * 이동 컨테이너 스타일
+ * 메모 섹션과 버튼 그룹을 포함하는 컨테이너입니다.
+ */
 .moveContainer {
   /* .detailContainer의 두 번째 직계 자식 */
   width: 100%; /* 모바일: 전체 너비 */
-  height: 100%; /* 마찬가지로 필요하지 않으면 'auto'로 두거나 제거 고려 */
+  height: 100%; /* 필요하지 않으면 'auto'로 두거나 제거하는 것을 고려하세요. */
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 24px;
+  flex-direction: column; /* 세로 정렬 */
+  align-items: center; /* 가로 중앙 정렬 */
+  gap: 24px; /* 자식 요소들 간의 간격 */
 }
 
 /* ============================================================= */
 /* Memo Section 스타일 */
 /* ============================================================= */
+/*
+ * 메모 컨테이너 스타일
+ * 할 일에 대한 메모를 작성하고 표시하는 영역입니다.
+ */
 .memoContainer {
   /* .moveContainer의 자식 */
-  position: relative;
+  position: relative; /* 자식 요소들의 절대 위치 지정을 위한 기준 */
   width: 100%;
-  max-width: 996px;
-  height: 311px;
-  border-radius: 24px;
-  overflow: hidden;
-  margin-top: 24px; /* 모바일/태블릿 전용 마진 */
-  padding: 0;
+  max-width: 996px; /* 최대 너비 */
+  height: 311px; /* 고정 높이 */
+  border-radius: 24px; /* 둥근 모서리 */
+  overflow: hidden; /* 컨테이너를 벗어나는 내용 숨김 */
+  margin-top: 24px; /* 모바일/태블릿 전용 상단 마진 */
+  padding: 0; /* 내부 여백 없음 */
 
-  background-image: url("/img/memo.svg");
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
+  background-image: url("/img/memo.svg"); /* 메모 배경 이미지 */
+  background-size: cover; /* 배경 이미지 크기 조절 */
+  background-repeat: no-repeat; /* 배경 이미지 반복 없음 */
+  background-position: center; /* 배경 이미지 중앙 정렬 */
 
   display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
+  flex-direction: column; /* 세로 정렬 */
+  justify-content: flex-start; /* 상단 정렬 */
 }
 
+/*
+ * 메모 제목 스타일
+ * 메모 컨테이너 상단에 표시되는 제목입니다.
+ */
 .memoTitle {
   position: relative;
-  z-index: 1;
-  height: 60px;
+  z-index: 1; /* 다른 요소 위에 표시 */
+  height: 60px; /* 고정 높이 */
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: center; /* 가로 중앙 정렬 */
+  align-items: center; /* 세로 중앙 정렬 */
 
-  font-family: var(--font-nanum-square-extra-bold), sans-serif;
-  font-weight: 800;
-  font-size: 20px;
-  color: var(--amber-800);
+  font-family: var(--font-nanum-square-extra-bold), sans-serif; /* 글꼴 */
+  font-weight: 800; /* 글꼴 두께 */
+  font-size: 20px; /* 글꼴 크기 */
+  color: var(--amber-800); /* 글꼴 색상 */
 }
 
+/*
+ * 메모 텍스트 영역 스타일
+ * 사용자가 메모를 입력할 수 있는 텍스트 영역입니다.
+ */
 .memoTextarea {
   position: relative;
-  z-index: 1;
-  margin: 16px 20px 20px 20px;
-  width: auto;
-  flex-grow: 1;
-  padding: 12px;
-  border: none;
-  background-color: transparent;
-  outline: none;
-  resize: none;
-  font-family: var(--font-nanum-square-regular), sans-serif;
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 140%;
-  color: var(--slate-900);
+  z-index: 1; /* 다른 요소 위에 표시 */
+  margin: 16px 20px 20px 20px; /* 상우하좌 외부 여백 */
+  width: auto; /* 자동 너비 */
+  flex-grow: 1; /* 남은 공간을 채우도록 확장 */
+  padding: 12px; /* 내부 여백 */
+  border: none; /* 테두리 없음 */
+  background-color: transparent; /* 투명 배경 */
+  outline: none; /* 포커스 시 아웃라인 없음 */
+  resize: none; /* 크기 조절 비활성화 */
+  font-family: var(--font-nanum-square-regular), sans-serif; /* 글꼴 */
+  font-weight: 400; /* 글꼴 두께 */
+  font-size: 14px; /* 글꼴 크기 */
+  line-height: 140%; /* 줄 간격 */
+  color: var(--slate-900); /* 글꼴 색상 */
 }
 
 /* ============================================================= */
 /* Button Group */
 /* ============================================================= */
+/*
+ * 버튼 그룹 스타일
+ * 페이지 하단에 위치한 액션 버튼들의 그룹입니다.
+ */
 .buttonGroup {
   display: flex;
-  gap: 16px;
+  gap: 16px; /* 버튼 간의 간격 */
   width: 100%;
-  max-width: 996px;
-  justify-content: center;
+  max-width: 996px; /* 최대 너비 */
+  justify-content: center; /* 가로 중앙 정렬 */
 }
 
 /* ============================================================= */
 /* 반응형 디자인 */
 /* ============================================================= */
-/* 태블릿 (min-width 부터 시작) */
+
+/*
+ * 태블릿 뷰포트 스타일 (최소 너비: var(--tablet-min-width) 이상)
+ */
 @media (min-width: var(--tablet-min-width)) {
   .mainContent {
-    padding: 32px 32px;
-    gap: 32px;
+    padding: 32px 32px; /* 태블릿에 맞춰 패딩 조정 */
+    gap: 32px; /* 태블릿에 맞춰 간격 조정 */
   }
 
   .memoContainer {
-    margin-top: 32px;
+    margin-top: 32px; /* 태블릿에 맞춰 상단 마진 조정 */
   }
 }
 
-/* 데스크톱 (min-width 부터 시작) */
+/*
+ * 데스크톱 뷰포트 스타일 (최소 너비: var(--desktop-min-width) 이상)
+ */
 @media (min-width: var(--desktop-min-width)) {
   .mainContent {
-    padding: 32px 20px;
-    gap: 20px; /* 이미지 컨테이너와 메모 컨테이너 사이 간격 */
-    flex-direction: row; /* ⭐ mainContent도 가로 정렬 ⭐ */
-    align-items: flex-start; /* 상단 정렬 */
-    justify-content: center; /* 가운데 정렬 */
+    padding: 32px 20px; /* 데스크톱에 맞춰 패딩 조정 */
+    gap: 20px; /* 이미지 컨테이너와 메모 컨테이너 사이 간격 조정 */
+    flex-direction: row; /* 메인 컨텐츠 가로 정렬 */
+    align-items: flex-start; /* 자식 요소들을 상단에 정렬 */
+    justify-content: center; /* 가로 중앙 정렬 */
   }
 
   .detailContainer {
-    flex-direction: row; /* ⭐ 여기도 flex-direction: row 적용 ⭐ */
+    flex-direction: row; /* 상세 정보 컨테이너 가로 정렬 */
     align-items: flex-start; /* 자식 요소들을 상단에 정렬 */
     width: 100%; /* mainContent의 전체 너비를 차지하도록 */
     gap: 20px; /* imageInputContainer와 moveContainer 사이의 간격 */
   }
 
-  /* ⭐ 가장 중요한 수정: .detailContainer의 직계 자식인 .imageInputContainer와 .moveContainer의 너비를 설정 ⭐ */
+  /*
+   * 이미지 입력 컨테이너와 이동 컨테이너의 너비 설정 (데스크톱)
+   * .detailContainer 내에서 50% 너비를 가지도록 설정합니다.
+   */
   .imageInputContainer,
   .moveContainer {
-    /* <-- .memoContainer 대신 .moveContainer를 선택자로 사용 */
     width: calc(50% - 10px); /* 50% - (.detailContainer의 gap의 절반) */
     max-width: unset; /* 더 이상 최대 너비 제한이 필요 없음 */
     margin-top: 0; /* 가로 정렬 시 세로 마진 제거 */
   }
 
   .memoContainer {
-    /* .memoContainer는 이제 .moveContainer의 자식입니다. */
-    /* .moveContainer가 Flex 컨테이너이고 column 방향이므로, .memoContainer는 100% 너비를 유지할 수 있습니다. */
+    /* .memoContainer는 이제 .moveContainer의 자식이며, .moveContainer가 Flex 컨테이너이므로 100% 너비를 유지할 수 있습니다. */
     height: 311px; /* 이미지 컨테이너와 높이를 맞춥니다. */
     margin-top: 0; /* 데스크톱에서는 이전에 적용된 마진 제거 */
   }
 
-  /* 데스크톱에서 Memo 텍스트 영역 높이 조정 (필요시) */
+  /*
+   * 데스크톱에서 메모 텍스트 영역 높이 조정
+   */
   .memoTextarea {
     height: calc(
       100% - 60px - 36px
     ); /* 전체 높이 - memoTitle 높이 - 위아래 margin */
-    box-sizing: border-box; /* padding이 높이에 포함되도록 */
+    box-sizing: border-box; /* 패딩이 높이에 포함되도록 */
   }
 
   .buttonGroup {

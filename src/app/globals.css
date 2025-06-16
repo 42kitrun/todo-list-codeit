@@ -1,97 +1,128 @@
 /* src/app/globals.css */
 
+/**
+ * @file globals.css
+ * @brief Next.js 프로젝트의 전역 스타일을 정의합니다.
+ *
+ * 이 파일은 CSS 변수를 사용하여 디자인 토큰을 관리하고,
+ * 기본 HTML 요소의 스타일을 재정의하며, 전역적으로 적용되는 유틸리티 스타일을 포함합니다.
+ */
+
+/*
+ * CSS 변수 (Custom Properties) 정의
+ * --:root 의사 클래스 내에 정의되어 문서 전체에서 접근 가능합니다.
+ * 주로 색상 팔레트, 폰트 스택, 그림자 등 디자인 시스템의 핵심 값을 정의합니다.
+ */
 :root {
   /* Color Palette (Figma 시안 기반 최종 확정) */
-  --violet-600: #7f5af0; /* Button Primary, DONE 체크박스 테두리/내부 */
-  --lime-300: #bdff32; /* Active Filter Background, Checkbox Done 내부 */
-  --rose-500: #ef4444; /* Delete Button Background */
-  --amber-800: #92400e;
+  --violet-600: #7f5af0; /* 버튼 기본색, 완료된 체크박스 테두리/내부 */
+  --lime-300: #bdff32; /* 활성 필터 배경, 완료된 체크박스 내부 */
+  --rose-500: #ef4444; /* 삭제 버튼 배경 */
+  --amber-800: #92400e; /* 특정 텍스트 색상 (예: 메모 제목) */
 
-  --slate-900: #0f172a; /* Primary Text, Button Text (검정색에 가까움) */
-  --slate-800: #1e293b; /* CheckListDetail 배경색 (수정) */
+  --slate-900: #0f172a; /* 주 텍스트 색상 (검정색에 가까움) */
+  --slate-800: #1e293b; /* CheckListDetail 컴포넌트 배경색 */
   --slate-700: #334155;
   --slate-600: #475569;
-  --slate-500: #64748b; /* Secondary Text, Empty State Text */
-  --slate-400: #94a3b8; /* Placeholder Text, Border for Input/TODO checkbox */
-  --slate-300: #cbd5e1; /* Input Border, Checkbox TODO border, Dashed border */
-  --slate-200: #e2e8f0; /* Divider, Filter Button Inactive BG, Button Secondary Hover */
+  --slate-500: #64748b; /* 보조 텍스트 색상, 빈 상태 메시지 텍스트 */
+  --slate-400: #94a3b8; /* 플레이스홀더 텍스트, 입력 필드/TODO 체크박스 테두리 */
+  --slate-300: #cbd5e1; /* 입력 필드 테두리, TODO 체크박스 테두리, 점선 테두리 */
+  --slate-200: #e2e8f0; /* 구분선, 필터 버튼 비활성 배경, 보조 버튼 호버 */
   --slate-100: #f1f5f9; /* 전체 배경색 (Figma 시안 배경색) */
 
-  --white: #ffffff; /* GNB, Search, CheckListItem 배경색 */
-  --gray-50: #f9fafb; /* 전체 배경*/
+  --white: #ffffff; /* GNB, 검색창, 체크리스트 항목 배경색 */
+  --gray-50: #f9fafb; /* 앱의 전반적인 배경색 */
 
   /* 추가된 시안 색상 */
   --violet-100: #f0ebff; /* 완료된 할 일 항목 배경색 */
 
-  /* Semantic Colors */
-  --background: var(
-    --gray-50
-  ); /* 전체 배경색 변수명 통일 (background-color -> background) */
-  --text-primary: var(--slate-900); /* 기본 텍스트 색상 (검정색에 가까움) */
-  --text-secondary: var(--slate-500); /* 보조 텍스트 색상 (회색) */
-  --text-placeholder: var(--slate-400);
+  /* Semantic Colors (의미론적 색상) */
+  /* 각 UI 요소에 매핑되는 추상적인 색상 변수로, 실제 색상 팔레트 변수를 참조합니다. */
+  --background: var(--gray-50); /* 앱의 주 배경색 */
+  --text-primary: var(--slate-900); /* 기본 텍스트 색상 */
+  --text-secondary: var(--slate-500); /* 보조 텍스트 색상 */
+  --text-placeholder: var(--slate-400); /* 입력 필드 플레이스홀더 텍스트 색상 */
 
-  --button-primary: var(--violet-600);
-  --button-primary-active: #6c4ed1; /* violet-600보다 살짝 어둡게 */
-  --button-secondary: var(--white); /* Button variant secondary는 흰색 배경 */
-  --button-secondary-active: var(--slate-200); /* 호버 시 slate-200 */
-  --delete-button-bg: var(--rose-500);
-  --delete-button-active: #d13a3a;
+  --button-primary: var(--violet-600); /* 주 버튼 배경색 */
+  --button-primary-active: #6c4ed1; /* 주 버튼 클릭/활성 상태 배경색 */
+  --button-secondary: var(--white); /* 보조 버튼 배경색 */
+  --button-secondary-active: var(
+    --slate-200
+  ); /* 보조 버튼 호버/활성 상태 배경색 */
+  --delete-button-bg: var(--rose-500); /* 삭제 버튼 배경색 */
+  --delete-button-active: #d13a3a; /* 삭제 버튼 클릭/활성 상태 배경색 */
 
-  --active-filter-bg: var(--lime-300);
-  --active-filter-text: var(--slate-900);
+  --active-filter-bg: var(--lime-300); /* 활성 필터 버튼 배경색 */
+  --active-filter-text: var(--slate-900); /* 활성 필터 버튼 텍스트 색상 */
 
-  /* Shadows */
-  --shadow-default: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  /* Shadows (그림자 효과) */
+  --shadow-default: 0px 4px 10px rgba(0, 0, 0, 0.1); /* 기본 그림자 스타일 */
 
-  /*데스크톱, 태블릿, 모바일 크기*/
-  --mobile-max-width: 767px; /* 일반적으로 모바일은 767px 이하 */
-  --tablet-min-width: 768px; /* 태블릿은 768px부터 시작 */
-  --tablet-max-width: 1023px; /* 태블릿 최대 1023px (데스크톱 전) */
-  --desktop-min-width: 1024px; /* 데스크톱은 1024px부터 시작  */
+  /* 반응형 디자인을 위한 뷰포트 크기 변수 */
+  --mobile-max-width: 767px; /* 모바일 최대 너비 */
+  --tablet-min-width: 768px; /* 태블릿 최소 너비 */
+  --tablet-max-width: 1023px; /* 태블릿 최대 너비 */
+  --desktop-min-width: 1024px; /* 데스크톱 최소 너비 */
 }
 
+/*
+ * 기본 HTML, Body 요소 스타일 재정의
+ * 모든 페이지에 공통적으로 적용되는 기본 스타일을 설정합니다.
+ */
 html,
 body {
-  padding: 0;
-  margin: 0;
-  /* Next.js localFont의 CSS 변수를 사용하여 폰트 적용 (정확한 변수명 사용) */
+  padding: 0; /* 기본 패딩 제거 */
+  margin: 0; /* 기본 마진 제거 */
+  /* Next.js localFont의 CSS 변수를 사용하여 폰트 적용 */
   font-family: var(--font-nanum-square-regular), var(--font-nanum-square-bold),
-    sans-serif;
-  background-color: var(--background);
-  color: var(--text-primary); /* 모든 텍스트의 기본 색상 */
-  line-height: 1.5;
-  font-size: 16px;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    sans-serif; /* 나눔스퀘어 폰트 적용, 없으면 sans-serif 대체 */
+  background-color: var(--background); /* 전역 배경색 설정 */
+  color: var(--text-primary); /* 모든 텍스트의 기본 색상 설정 */
+  line-height: 1.5; /* 기본 줄 간격 */
+  font-size: 16px; /* 기본 폰트 크기 */
+  -webkit-font-smoothing: antialiased; /* 웹킷 브라우저에서 폰트 안티앨리어싱 적용 */
+  -moz-osx-font-smoothing: grayscale; /* 모질라 브라우저에서 폰트 그레이스케일 렌더링 */
 }
 
+/*
+ * 링크(a) 요소 스타일
+ * 기본 밑줄 제거 및 색상 상속 설정
+ */
 a {
-  color: inherit;
-  text-decoration: none;
+  color: inherit; /* 부모 요소의 텍스트 색상 상속 */
+  text-decoration: none; /* 밑줄 제거 */
 }
 
+/*
+ * 모든 요소에 대한 박스 모델 설정
+ * border-box를 사용하여 패딩과 보더가 요소의 너비/높이에 포함되도록 합니다.
+ */
 * {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+  box-sizing: border-box; /* CSS Box Model을 border-box로 설정 */
+  margin: 0; /* 모든 요소의 기본 마진 제거 */
+  padding: 0; /* 모든 요소의 기본 패딩 제거 */
 }
 
-/* 스크롤바 커스터마이징 (선택 사항) */
+/*
+ * 스크롤바 커스터마이징 (선택 사항)
+ * 웹킷 기반 브라우저(Chrome, Safari 등)에 적용됩니다.
+ */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 8px; /* 스크롤바 너비 */
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: var(--slate-400);
-  border-radius: 4px;
+  background-color: var(--slate-400); /* 스크롤바 핸들 색상 */
+  border-radius: 4px; /* 스크롤바 핸들 모서리 둥글게 */
 }
 
 ::-webkit-scrollbar-track {
-  background-color: var(--slate-200);
+  background-color: var(--slate-200); /* 스크롤바 트랙 색상 */
 }
 
-/* Gnb가 fixed 될 경우를 대비한 body 패딩 */
-/* Gnb 컴포넌트 높이에 따라 조절이 필요할 수 있습니다.
-   현재 시안에서는 Gnb가 스크롤 시 고정되지 않는 것으로 보이므로 별도 패딩은 추가하지 않습니다.
-   만약 Gnb가 fixed 된다면, body에 Gnb 높이만큼의 padding-top을 주어야 합니다. */
+/*
+ * Gnb (Global Navigation Bar) 고정 시를 위한 고려사항 주석
+ * 현재 시안에서는 Gnb가 스크롤 시 고정되지 않는 것으로 보이므로 별도 패딩은 추가하지 않습니다.
+ * 만약 Gnb가 fixed position으로 설정된다면, body에 Gnb 높이만큼의 padding-top을 주어
+ * Gnb 아래로 컨텐츠가 가려지지 않도록 해야 합니다.
+ */

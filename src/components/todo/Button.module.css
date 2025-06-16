@@ -1,136 +1,196 @@
 /* src/components/todo/Button.module.css */
 
+/*
+  Button 컴포넌트의 스타일을 정의하는 CSS 모듈입니다.
+  이 파일은 재사용 가능한 버튼의 다양한 변형과 상태를 처리합니다.
+  주요 기능:
+  - 버튼의 기본 스타일 (크기, 폰트, 테두리, 그림자 효과)
+  - 다양한 'variant' (add, addInitial, delete, submitSuccess, detailImageAdd, detailImageEdit)
+  - 아이콘 전용 버튼 스타일
+  - 활성화/비활성화 상태 및 호버 효과
+  - 반응형 디자인 (모바일 최적화)
+*/
+
+/* --- Button Wrapper --- */
+/*
+  .buttonWrapper: 버튼과 그림자를 포함하는 컨테이너입니다.
+  자식 요소인 .buttonShadowBackground를 절대 위치로 배치하기 위해 `position: relative`를 사용합니다.
+  버튼을 중앙에 정렬하기 위해 flexbox를 사용합니다.
+*/
 .buttonWrapper {
-  position: relative; /* 자식 요소인 buttonShadowBackground를 absolute로 배치하기 위함 */
-  display: flex; /* 버튼을 중앙 정렬하기 위함 */
+  position: relative;
+  display: flex;
   justify-content: center;
   align-items: center;
-  /* width와 height는 내부 button이 결정하므로 여기서는 최소한의 설정만 */
-  /* height: 56px; 버튼 높이에 그림자 높이 4px 포함 (52 + 4) */
 }
 
-/* 버튼 자체의 기본 스타일 */
+/* --- Base Button Styles --- */
+/*
+  .btnBase: 모든 버튼에 공통으로 적용되는 기본 스타일입니다.
+  폰트, 텍스트 정렬, 커서, 테두리, 모서리 둥글기 등을 정의합니다.
+  `position: relative`와 `z-index: 1`을 통해 그림자 위에 버튼이 위치하도록 합니다.
+*/
 .btnBase {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: var(--font-nanum-square-bold), sans-serif; /* NanumSquare Bold 폰트 적용 */
-  font-weight: 700; /* NanumSquare Bold */
-  font-size: 16px; /* 시안 폰트 크기 */
+  font-family: var(--font-nanum-square-bold), sans-serif;
+  font-weight: 700;
+  font-size: 16px;
   line-height: 100%;
   letter-spacing: 0%;
   text-align: center;
   vertical-align: middle;
   cursor: pointer;
   box-sizing: border-box;
-  border-radius: 24px; /* 기본 둥근 모서리, 각 variant에서 오버라이드 가능 */
-  border: 2px solid var(--slate-900); /* 모든 버튼에 기본 테두리 */
-  position: relative; /* shadowBackground 위에 오도록 */
-  z-index: 1; /* shadowBackground 위에 오도록 */
-  top: 0; /* 초기 위치 */
-  left: 0; /* 초기 위치 */
-  width: 164.35px;
-  height: 52px;
+  border-radius: 24px;
+  border: 2px solid var(--slate-900);
+  position: relative;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  width: 164.35px; /* 기본 버튼 너비 */
+  height: 52px; /* 기본 버튼 높이 */
 }
 
-/* 버튼 그림자 역할을 하는 둥근 직사각형 */
+/* --- Button Shadow Background --- */
+/*
+  .buttonShadowBackground: 버튼 아래에 위치하여 입체적인 그림자 효과를 주는 요소입니다.
+  절대 위치를 사용하여 버튼 뒤에 배치되며, `z-index: 0`으로 버튼(.btnBase)보다 아래에 놓입니다.
+  그림자의 색상, 테두리, 둥근 모서리, 위치(top, left)를 정의합니다.
+*/
 .buttonShadowBackground {
   position: absolute;
-  background: var(--slate-900); /* 그림자 색상 #0F172A */
-  border: 2px solid var(--slate-900); /* 그림자 테두리 색상 #0F172A */
-  border-radius: 23px; /* 시안과 동일한 border-radius */
-  z-index: 0; /* btnBase 뒤에 위치 */
-  top: 5px; /* 시안 top: 4px */
-  left: 4.5px; /* left/right는 각 variant에서 설정 */
-  width: 164.35px;
-  height: 52px;
+  background: var(--slate-900);
+  border: 2px solid var(--slate-900);
+  border-radius: 23px;
+  z-index: 0;
+  top: 5px;
+  left: 4.5px;
+  width: 164.35px; /* 그림자 너비 (기본 버튼과 동일) */
+  height: 52px; /* 그림자 높이 (기본 버튼과 동일) */
 }
 
-/* 텍스트가 없는 아이콘 전용 버튼 (공통) */
+/* --- Icon Only Button (Common) --- */
+/*
+  .btnIconOnly: 텍스트 없이 아이콘만 포함하는 버튼에 적용되는 공통 스타일입니다.
+  정해진 너비와 높이로 원형 버튼을 만듭니다.
+*/
 .btnIconOnly {
   width: 54.78px;
-  height: 52px; /* 시안에서 아이콘만 있는 버튼의 높이 52px */
-  border-radius: 50%; /* 원형 */
+  height: 52px;
+  border-radius: 50%; /* 원형 버튼 */
   padding: 0; /* 내부 패딩 제거 */
 }
 
-/* --- 'add' variant --- */
+/* --- 'add' Variant --- */
+/*
+  .btnAdd: 'add' variant 버튼의 스타일입니다. (예: 할 일 추가 버튼)
+  기본 배경색, 텍스트 색상, 패딩을 정의합니다.
+*/
 .btnAdd {
-  /* 데스크톱/태블릿 시안의 기본 너비 */
   background-color: var(--slate-200);
   color: var(--slate-900);
-  padding: 0 24px; /* 텍스트가 있을 때의 패딩 - (이전 코드는 padding: 0; 였지만, 여기서는 명시적으로 24px로 설정합니다. */
-  /* flex-shrink: 0; // 필요시 추가: 공간이 부족해도 줄어들지 않게 함 */
+  padding: 0 24px; /* 텍스트가 있을 때의 가로 패딩 */
 }
+
+/* .btnAdd 호버 상태 */
 .btnAdd:hover {
   background-color: var(--slate-300);
 }
 
+/* 'add' variant이면서 아이콘 전용일 때의 스타일 */
 .btnAdd.btnIconOnly {
   background-color: var(--slate-200);
   color: var(--slate-900);
 }
 
-/* 'add' variant 이면서 아이콘만 있는 경우의 buttonShadowBackground (모바일에서 적용) */
+/* 'add' variant 아이콘 전용 버튼의 그림자 스타일 */
 .btnAdd.btnIconOnly + .buttonShadowBackground {
-  width: 54.78px; /* 모바일 시안 아이콘만 있는 버튼 그림자 너비 */
+  width: 54.78px; /* 모바일 시안에 맞춘 그림자 너비 */
 }
 
-/* --- 'addInitial' variant --- */
+/* --- 'addInitial' Variant --- */
+/*
+  .btnAddInitial: 'addInitial' variant 버튼의 스타일입니다. (예: 초기 할 일 추가 버튼)
+  배경색과 텍스트 색상이 다릅니다.
+*/
 .btnAddInitial {
   background-color: var(--violet-600);
   color: var(--white);
-  padding: 0 24px; /* 텍스트가 있을 때의 패딩 */
-}
-.btnAddInitial:hover {
-  background-color: #6a2cc7;
+  padding: 0 24px; /* 텍스트가 있을 때의 가로 패딩 */
 }
 
-/* 'addInitial' variant 이면서 아이콘만 있는 경우 (모바일에서 적용) */
-/* 이 부분이 중요합니다. 기존 .btnIconOnly의 52px을 오버라이드해야 합니다. */
+/* .btnAddInitial 호버 상태 */
+.btnAddInitial:hover {
+  background-color: #6a2cc7; /* violet-600보다 살짝 어두운 색상 */
+}
+
+/* 'addInitial' variant이면서 아이콘 전용일 때의 스타일 */
 .btnAddInitial.btnIconOnly {
   background-color: var(--violet-600);
 }
 
-/* 'addInitial' variant 이면서 아이콘만 있는 경우의 buttonShadowBackground (모바일에서 적용) */
+/* 'addInitial' variant 아이콘 전용 버튼의 그림자 스타일 */
 .btnAddInitial.btnIconOnly + .buttonShadowBackground {
-  width: 54.78px; /* 모바일 시안 아이콘만 있는 버튼 그림자 너비 */
+  width: 54.78px; /* 모바일 시안에 맞춘 그림자 너비 */
 }
 
-/* --- 'delete' variant (붉은색 배경) --- */
+/* --- 'delete' Variant --- */
+/*
+  .btnDelete: 'delete' variant 버튼의 스타일입니다. (예: 할 일 삭제 버튼)
+  경고를 나타내는 붉은색 배경을 가집니다.
+*/
 .btnDelete {
-  background-color: var(--rose-500); /* rose/500 배경 */
+  background-color: var(--rose-500);
   color: var(--white);
 }
+
+/* .btnDelete 호버 상태 */
 .btnDelete:hover {
-  background-color: #d13f47; /* rose/500보다 살짝 어둡게 (임시 값) */
+  background-color: #d13f47; /* rose-500보다 살짝 어두운 색상 */
 }
 
-/* --- 'submitSuccess' variant (저장/확인 버튼) --- */
+/* --- 'submitSuccess' Variant --- */
+/*
+  .btnSubmitSuccess: 'submitSuccess' variant 버튼의 스타일입니다. (예: 저장/확인 버튼)
+  활성화/비활성화 상태에 따라 배경색이 달라집니다.
+*/
+
+/* .btnSubmitSuccess 활성화 상태 */
 .btnSubmitSuccess.active {
-  background-color: var(--lime-300); /* 활성화 시 lime/300 */
-}
-.btnSubmitSuccess.active:hover {
-  background-color: #a4cc49; /* lime/300보다 살짝 어둡게 (임시 값) */
-}
-.btnSubmitSuccess.inactive {
-  background-color: var(--slate-200); /* 비활성화 시 slate/200 */
-  color: var(--slate-900);
-}
-.btnSubmitSuccess.inactive:hover {
-  background-color: var(--slate-300); /* 비활성화 상태에서는 hover 효과 없음 */
+  background-color: var(--lime-300);
 }
 
-/* --- 이미지 추가/수정 아이콘 버튼 (detailImageAdd, detailImageEdit) --- */
+/* .btnSubmitSuccess 활성화 상태 호버 */
+.btnSubmitSuccess.active:hover {
+  background-color: #a4cc49; /* lime-300보다 살짝 어두운 색상 */
+}
+
+/* .btnSubmitSuccess 비활성화 상태 */
+.btnSubmitSuccess.inactive {
+  background-color: var(--slate-200);
+  color: var(--slate-900);
+  cursor: not-allowed; /* 비활성화 상태에서는 커서 변경 */
+}
+
+/* .btnSubmitSuccess 비활성화 상태에서는 호버 효과 없음 */
+.btnSubmitSuccess.inactive:hover {
+  background-color: var(--slate-300); /* 비활성화 상태에서도 배경색 유지 */
+}
+
+/* --- Image Action Icon Buttons (detailImageAdd, detailImageEdit) --- */
+/*
+  .btnIconImageAction: 이미지 추가/수정 등 이미지 관련 아이콘 전용 버튼의 공통 스타일입니다.
+  정해진 크기와 원형 모서리를 가집니다. 이 버튼은 그림자를 사용하지 않습니다.
+*/
 .btnIconImageAction {
-  width: 64px; /* 시안 (image_23b0f5.png) 참고. + 아이콘 버튼과 사이즈 동일하게 */
-  height: 64px; /* 시안 (image_23b0f5.png) */
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
 }
-.btnIconImageAction:hover {
-  /* 이 공통 호버는 각 variant에서 오버라이드될 수 있음 */
-}
 
+/* 이미지 액션 버튼은 그림자를 표시하지 않음 */
 .btnIconImageAction + .buttonShadowBackground {
   display: none;
 }
@@ -139,53 +199,66 @@
 .detailImageAddStyles {
   background-color: var(--slate-200);
 }
+
+/* detailImageAdd variant 호버 */
 .detailImageAddStyles:hover {
-  background-color: var(--slate-300); /* 호버 시 slate/100 */
+  background-color: var(--slate-300);
 }
 
 /* detailImageEdit variant (짙은 회색 배경) */
 .detailImageEditStyles {
-  background-color: var(--slate-600); /* rgba 직접 값 대신 변수 사용 */
-  border: 2px solid var(--slate-900); /* slate/900 테두리 */
+  background-color: var(--slate-600);
+  border: 2px solid var(--slate-900);
 }
+
+/* detailImageEdit variant 호버 */
 .detailImageEditStyles:hover {
-  background-color: var(--slate-700); /* rgba 직접 값 대신 변수 사용 */
+  background-color: var(--slate-700);
 }
 
-/* 아이콘 (Image 컴포넌트 내부) */
+/* --- Icon Styles --- */
+/*
+  .icon: 버튼 내부에 포함된 SVG 아이콘에 대한 스타일입니다.
+  `fill="currentColor"` 속성이 적용된 SVG 아이콘은 부모 요소의 `color` 속성에 따라 색상이 자동으로 변경됩니다.
+*/
 .icon {
-  /* SVG 아이콘이 fill="currentColor"를 따르도록 설정했다면,
-      부모 버튼의 color 속성에 따라 아이콘 색상이 자동으로 변합니다.
-      따라서 여기에 별도의 filter 스타일은 필요 없습니다. */
+  /* SVG 아이콘 색상은 부모 버튼의 `color` 속성을 따릅니다. */
 }
 
+/* 아이콘이 텍스트 왼쪽에 있을 때 텍스트와의 마진 */
 .iconMarginRight {
-  margin-right: 4px; /* 텍스트가 왼쪽에 있을 때 아이콘과 텍스트 사이 마진 */
+  margin-right: 4px;
 }
 
+/* 아이콘이 텍스트 오른쪽에 있을 때 텍스트와의 마진 */
 .iconMarginLeft {
-  margin-left: 4px; /* 텍스트가 오른쪽에 있을 때 아이콘과 텍스트 사이 마진 */
+  margin-left: 4px;
 }
 
-/* 반응형 미디어 쿼리: TABLET_MIN_WIDTH_FOR_JS 미만일 때 */
+/* --- Responsive Media Queries --- */
+/*
+  @media (max-width: var(--mobile--max-width)): 모바일 화면에 대한 반응형 스타일입니다.
+  주로 아이콘 전용 버튼의 너비와 그림자 너비를 모바일 시안에 맞게 조정합니다.
+*/
 @media (max-width: var(--mobile--max-width)) {
+  /* 'add' variant 아이콘 전용 버튼의 모바일 스타일 */
   .btnAdd.btnIconOnly {
     background-color: var(--slate-200);
     color: var(--slate-900);
   }
 
-  /* 'add' variant 이면서 아이콘만 있는 경우의 buttonShadowBackground (모바일에서 적용) */
+  /* 'add' variant 아이콘 전용 버튼의 그림자 모바일 스타일 */
   .btnAdd.btnIconOnly + .buttonShadowBackground {
-    width: 54.78px; /* 모바일 시안 아이콘만 있는 버튼 그림자 너비 */
+    width: 54.78px;
   }
 
-  /* 'addInitial' variant의 모바일 전용 스타일 (아이콘만 있을 때) */
+  /* 'addInitial' variant 아이콘 전용 버튼의 모바일 스타일 */
   .btnAddInitial.btnIconOnly {
     background-color: var(--violet-600);
   }
 
-  /* 'addInitial' variant 이면서 아이콘만 있는 경우의 buttonShadowBackground (모바일에서 적용) */
+  /* 'addInitial' variant 아이콘 전용 버튼의 그림자 모바일 스타일 */
   .btnAddInitial.btnIconOnly + .buttonShadowBackground {
-    width: 54.78px; /* 모바일 시안 아이콘만 있는 버튼 그림자 너비 */
+    width: 54.78px;
   }
 }
